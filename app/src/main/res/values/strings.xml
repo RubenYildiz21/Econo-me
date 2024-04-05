@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ProjetMobile</string>
+    <string name="home_button">Go To HomePage</string>
+    <string name="welcome">Bienvenu !</string>
 </resources>
