@@ -2,4 +2,6 @@
     <string name="app_name">ProjetMobile</string>
     <string name="home_button">Go To HomePage</string>
     <string name="welcome">Bienvenu !</string>
+    <string name="revenu">Mes revenus</string>
+    <string name="depense">Mes dépenses</string>
 </resources>
