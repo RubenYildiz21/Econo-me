@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/accueil"
+        android:enabled="true"
+        android:icon="@drawable/house_solid"
+        android:title="@string/accueil"/>
+
+    <item
+        android:id="@+id/statistiques"
+        android:enabled="true"
+        android:icon="@drawable/chart_simple_solid"
+        android:title="@string/statistiques"/>
+
+    <item
+        android:id="@+id/comptes"
+        android:enabled="true"
+        android:icon="@drawable/credit_card_solid"
+        android:title="@string/comptes"/>
+
+    <item
+        android:id="@+id/categories"
+        android:enabled="true"
+        android:icon="@drawable/list_solid"
+        android:title="@string/categories"/>
+
+    <item
+        android:id="@+id/transfert"
+        android:enabled="true"
+        android:icon="@drawable/transfert"
+        android:title="@string/transfert"/>
+</menu>

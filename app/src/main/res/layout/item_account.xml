@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/imageViewAccountIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/credit_card_solid"
+        app:tint="#003366" /> <!-- Replace with your own drawable -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
+
+        <TextView
+            android:id="@+id/textViewAccountName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carte de crédit"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="25dp"/>
+
+        <TextView
+            android:id="@+id/textViewAccountBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2083,22€"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:textSize="18dp"/>
+    </LinearLayout>
+</LinearLayout>
