@@ -11,8 +11,8 @@
         android:id="@+id/imageViewAccountIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/credit_card_solid"
-        app:tint="#003366" /> <!-- Replace with your own drawable -->
+        android:src="@drawable/ic_credit_card"
+        android:tint="#003366"/> <!-- Replace with your own drawable -->
 
     <LinearLayout
         android:layout_width="0dp"
@@ -25,9 +25,12 @@
             android:id="@+id/textViewAccountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Carte de crédit"
+            android:text="@string/account_type"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="25dp"/>
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="22dp"
+            android:textColor="#003366"/>
 
         <TextView
             android:id="@+id/textViewAccountBalance"
@@ -35,6 +38,8 @@
             android:layout_height="wrap_content"
             android:text="2083,22€"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="#003366"/>
     </LinearLayout>
 </LinearLayout>
