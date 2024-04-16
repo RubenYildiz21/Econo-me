@@ -12,4 +12,5 @@
     <string name="statistiques">Statistiques</string>
     <string name="comptes">Comptes</string>
     <string name="categories">Cqtégories</string>
+    <string name="addAccount">Ajouter un type de compte</string>
 </resources>
