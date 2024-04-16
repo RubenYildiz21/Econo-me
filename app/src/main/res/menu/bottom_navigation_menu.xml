@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/accueil"
-        android:enabled="true"
         android:icon="@drawable/ic_home"
         android:title="@string/accueil"/>
 
     <item
         android:id="@+id/statistiques"
-        android:enabled="true"
         android:icon="@drawable/ic_statistiques"
         android:title="@string/statistiques"/>
 
     <item
         android:id="@+id/comptes"
-        android:enabled="true"
         android:icon="@drawable/ic_credit_card"
         android:title="@string/comptes"/>
 
     <item
         android:id="@+id/categories"
-        android:enabled="true"
         android:icon="@drawable/ic_categories"
         android:title="@string/categories"/>
 
     <item
         android:id="@+id/transfert"
-        android:enabled="true"
         android:icon="@drawable/ic_transfert"
         android:title="@string/transfert"/>
 </menu>
