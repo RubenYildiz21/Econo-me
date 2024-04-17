@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import be.helmo.projetmobile.databinding.AccountsActivityBinding
 import be.helmo.projetmobile.databinding.ActivityMainBinding
 
 class MainActivity : ComponentActivity() {
@@ -16,6 +17,12 @@ class MainActivity : ComponentActivity() {
 
         binding.homeButton.setOnClickListener {
             var intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+        val accountBinding = AccountsActivityBinding.inflate(layoutInflater)
+        accountBinding.addAccount.setOnClickListener {
+            var intent = Intent(this, AccountActivity::class.java)
             startActivity(intent)
         }
     }
