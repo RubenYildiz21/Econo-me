@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".MainActivity">
 
-    <Button
+    <FrameLayout
+        android:id="@+id/frameLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNav"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/fragment_navbar"
+        app:itemIconTint="@color/bottom_nav_bar_color"
+        app:itemTextColor="@color/bottom_nav_bar_color"
+        android:background="@color/white"
+        android:scrollIndicators="left"/>
+
+    <!--<Button
         android:id="@+id/home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/home_button"/>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/category_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/category_button"/>-->
+</RelativeLayout>

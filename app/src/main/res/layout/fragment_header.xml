@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="#003366">
+
+    <ImageButton
+        android:id="@+id/headerButton"
+        android:layout_marginStart="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/user_solid"
+        android:background="#003366"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/headerMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="@string/welcome"
+        android:textColor="@color/white"
+        android:layout_toEndOf="@id/headerButton"
+        android:layout_centerVertical="true" />
+</RelativeLayout>

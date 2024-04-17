@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">ProjetMobile</string>
     <string name="home_button">Go To HomePage</string>
+    <string name="category_button">Go To Category</string>
     <string name="welcome">Bienvenu !</string>
     <string name="revenu">Mes revenus</string>
     <string name="depense">Mes dépenses</string>
+    <string name="new_category">Ajouter une categorie</string>
+    <string name="category_name_title">Nom de la categorie :\n</string>
+    <string name="category_name_edit_text">Entrez le nom de la categorie ici</string>
+    <string name="nav_Home">Home</string>
+    <string name="nav_Categories">Categories</string>
+    <string name="nav_Transfert">Transfert</string>
+    <string name="nav_Accounts">Accounts</string>
+    <string name="nav_Statistiques">Statisitiques</string>
+    <string name="add_cat">Ajouter une categorie</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -13,7 +13,7 @@
         android:background="#003366"
         android:elevation="16dp">
 
-        <ImageView
+        <ImageButton
             android:layout_marginStart="8dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -68,11 +68,12 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
-        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:name="be.helmo.projetmobile.view.CategoryListFragment">
+        <!--android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph">
+        app:navGraph="@navigation/nav_graph">-->
     </androidx.fragment.app.FragmentContainerView>
 
     <Button

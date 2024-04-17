@@ -1,52 +1,48 @@
 package be.helmo.projetmobile
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
+import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import be.helmo.projetmobile.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var bottomNav: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(this.localClassName, "onCreate called")
-
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.homeButton.setOnClickListener {
-            var intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+        /**val headerLayout = LayoutInflater.from(this).inflate(R.layout.fragment_header, null)
+        supportActionBar?.setDisplayShowCustomEnabled(true)
+        supportActionBar?.customView = headerLayout
+        supportActionBar?.setDisplayShowTitleEnabled(false)*/
+
+        loadFragment(HomeFragment())
+        bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)!!
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+
+                R.id.categories -> {
+                    loadFragment(CategoriesFragment())
+                    true
+                }
+
+                else -> {true}
+            }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(this.localClassName, "onStart called")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(this.localClassName, "onResume called")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(this.localClassName, "onPause called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(this.localClassName, "onStop called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(this.localClassName, "onDestroy called")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d(this.localClassName, "onRestart called")
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayoutContainer, fragment)
+        transaction.commit()
     }
 }
