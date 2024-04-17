@@ -65,13 +65,11 @@ class AccountActivity : ComponentActivity() {
     }
     private fun showAddAccountDialog() {
         val dialogView = layoutInflater.inflate(R.layout.add_account_dialog, null)
-        val editText = dialogView.findViewById<EditText>(R.id.transferAmount)
 
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.transfer))
+            .setTitle(getString(R.string.addAccount))
             .setView(dialogView)
             .setPositiveButton(getString(R.string.transfer)) { dialog, which ->
-                val amount = editText.text.toString().toDouble()
                 // Effectuez le transfert ici
             }
             .setNegativeButton(getString(R.string.cancel), null)

@@ -12,7 +12,7 @@
     <string name="statistiques">Statistiques</string>
     <string name="comptes">Comptes</string>
     <string name="categories">Cqtégories</string>
-    <string name="addAccount">Ajouter un type de compte</string>
+    <string name="addAccount">Ajouter un compte</string>
     <string name="goToAccoun">Vers mes compte</string>
     <string name="account_name">Nom du compte</string>
     <string name="account_description">Description</string>
