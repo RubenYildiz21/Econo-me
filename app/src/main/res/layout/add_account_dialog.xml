@@ -4,49 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/blue">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:layout_weight="0.2"
-            android:layout_gravity="start"
-            android:textSize="14sp"
-            android:background="@color/blueTransparent"
-            android:textColor="@color/white"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/account_title"
-            android:layout_weight="0.6"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/done"
-            android:layout_weight="0.2"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:background="@color/blue"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
+    android:padding="16dp">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/rounded_form_white"
         android:padding="10dp"
         android:layout_marginBottom="20dp">
         <EditText
@@ -55,7 +19,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/account_name"
             android:inputType="textPersonName"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/blue"/>
 
         <EditText
             android:id="@+id/accountDescription"
@@ -63,7 +28,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/account_description"
             android:inputType="textMultiLine"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/blue"/>
 
         <EditText
             android:id="@+id/accountCurrency"
@@ -71,32 +37,17 @@
             android:layout_height="wrap_content"
             android:hint="@string/currency"
             android:inputType="text"
-            android:layout_marginBottom="16dp"/>
-    </LinearLayout>
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/blue"/>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/rounded_form_white"
-        android:padding="10dp"
-        android:layout_marginBottom="20dp">
         <EditText
             android:id="@+id/accountBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/initial_balance"
             android:inputType="numberDecimal"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/blue"/>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/submitAccountButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:background="@drawable/rounded_button_white"
-        android:textColor="@color/blue" />
 </LinearLayout>
