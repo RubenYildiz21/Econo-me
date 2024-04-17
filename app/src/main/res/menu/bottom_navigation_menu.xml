@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/accueil"
         android:enabled="true"
-        android:icon="@drawable/house_solid"
-        android:title="@string/accueil"/>
+        android:icon="@drawable/ic_home"
+        android:title="@string/accueil"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/statistiques"
         android:enabled="true"
-        android:icon="@drawable/chart_simple_solid"
-        android:title="@string/statistiques"/>
+        android:icon="@drawable/ic_statistiques"
+        android:title="@string/statistiques"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/comptes"
         android:enabled="true"
-        android:icon="@drawable/credit_card_solid"
-        android:title="@string/comptes"/>
+        android:icon="@drawable/ic_credit_card"
+        android:title="@string/comptes"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/categories"
         android:enabled="true"
-        android:icon="@drawable/list_solid"
-        android:title="@string/categories"/>
+        android:icon="@drawable/ic_categories"
+        android:title="@string/categories"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/transfert"
         android:enabled="true"
-        android:icon="@drawable/transfert"
-        android:title="@string/transfert"/>
+        android:icon="@drawable/ic_transfert"
+        android:title="@string/transfert"
+        app:showAsAction="ifRoom"/>
 </menu>

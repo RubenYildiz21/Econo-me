@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white">
+
+
+    <TextView
+        android:id="@+id/tvTotalBalance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solde total 2083,22 €"
+        android:background="#003366"
+        android:textColor="#FFFFFF"
+        android:padding="16dp"
+        android:textAlignment="center"
+        android:textSize="20dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardAccounts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTotalBalance"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#CBCBDD"
+        android:elevation="4dp">
+
+        <!-- Add your hardcoded account views here -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- First hardcoded account item -->
+            <include layout="@layout/item_account" />
+
+            <!-- Second hardcoded account item -->
+            <include layout="@layout/item_account" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@+id/bottom_navigation"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnTransfer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Transfert"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddExpense"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/rounded_button"
+            android:src="@android:drawable/ic_input_add"
+            android:tint="#FFFFFF"
+            android:contentDescription="add_expense_button_description"/>
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/bottom_navigation_menu" />
+
+</RelativeLayout>
