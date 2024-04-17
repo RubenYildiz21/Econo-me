@@ -12,6 +12,19 @@
     <string name="statistiques">Statistiques</string>
     <string name="comptes">Comptes</string>
     <string name="categories">Cqtégories</string>
-    <string name="addAccount">Ajouter un type de compte</string>
-    <string name="addRecurrency">Ajouter une dépense récurrente</string>
+    <string name="addAccount">Ajouter un compte</string>
+    <string name="goToAccoun">Vers mes compte</string>
+    <string name="account_name">Nom du compte</string>
+    <string name="account_description">Description</string>
+    <string name="currency">Devise</string>
+    <string name="initial_balance">Solde de départ</string>
+    <string name="save">Ajouter mon compte</string>
+    <string name="cancel">Annuler</string>
+    <string name="account_title">Compte</string>
+    <string name="done">Fait</string>
+    <string name="transfer_amount">Montant a transférer</string>
+    <string name="amount">Montant</string>
+    <string name="transfer">Transfert</string>
+    <string name="select_source_account">De</string>
+    <string name="select_destination_account">Vers</string>
 </resources>
