@@ -115,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#003366"
+            android:background="@drawable/rounded_button"
             android:textColor="#FFFFFF"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"/>
@@ -146,7 +146,7 @@
                 android:contentDescription="@string/transfert"/>
 
             <Button
-                android:id="@+id/fabAddExpense"
+                android:id="@+id/AddExpense"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="15dp"
@@ -157,5 +157,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
 </RelativeLayout>
