@@ -15,7 +15,7 @@ interface CategoryDao {
     fun getCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM CATEGORY WHERE id=(:categoryId)")
-    suspend fun getCategory(categoryId: UUID): Category
+    suspend fun getCategory(categoryId: Int): Category
 
     @Insert
     suspend fun addCategory(category: Category)

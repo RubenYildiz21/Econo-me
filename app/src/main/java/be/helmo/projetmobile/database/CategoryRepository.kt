@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class CategoryRepository private constructor(val database: CategoryDatabase, private val coroutineScope: CoroutineScope = GlobalScope) {
+class CategoryRepository private constructor(val database: ProjectDatabase, private val coroutineScope: CoroutineScope = GlobalScope) {
 
     fun getCategories(): Flow<List<Category>> = database.categoryDao().getCategories()
 
-    suspend fun getCategory(categoryId: UUID): Category = database.categoryDao().getCategory(categoryId)
+    suspend fun getCategory(categoryId: Int): Category = database.categoryDao().getCategory(categoryId)
 
     suspend fun addCategory(category: Category) = database.categoryDao().addCategory(category)
 
@@ -24,13 +24,13 @@ class CategoryRepository private constructor(val database: CategoryDatabase, pri
     companion object {
         private var INSTANCE: CategoryRepository? = null
 
-        fun create(database: CategoryDatabase) {
+        fun create(database: ProjectDatabase) {
             INSTANCE = CategoryRepository(database)
         }
 
         fun get(): CategoryRepository {
             if(INSTANCE == null)
-                INSTANCE = CategoryRepository(CategoryDatabase.get())
+                INSTANCE = CategoryRepository(ProjectDatabase.get())
             return INSTANCE!!
         }
     }

@@ -12,7 +12,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class CategoryViewModel(categoryId: UUID): ViewModel() {
+
+/**
+ * Pas utilisé pour l'instant
+ */
+class CategoryViewModel(categoryId: Int): ViewModel() {
     private val categoryRepository = CategoryRepository.get()
 
     private val _category: MutableStateFlow<Category?> = MutableStateFlow(null)
@@ -39,7 +43,7 @@ class CategoryViewModel(categoryId: UUID): ViewModel() {
 
 }
 
-class CategoryViewModelFactory(private val categoryId: UUID): ViewModelProvider.Factory {
+class CategoryViewModelFactory(private val categoryId: Int): ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CategoryViewModel(categoryId) as T

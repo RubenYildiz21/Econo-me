@@ -14,12 +14,6 @@
         android:theme="@style/Theme.ProjetMobile"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".CategoriesActivity"
-            android:exported="false"/>
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

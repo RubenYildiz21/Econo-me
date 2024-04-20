@@ -22,7 +22,10 @@ import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class CategoryListFragment : Fragment(), MenuProvider {
+/**
+ * Affiche les categories presentent en bd
+ */
+class CategoryListFragment : Fragment() {
 
     private val categoryListViewModel: CategoryListViewModel by viewModels()
 
@@ -42,7 +45,7 @@ class CategoryListFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
 
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        //menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -56,6 +59,7 @@ class CategoryListFragment : Fragment(), MenuProvider {
         }
     }
 
+    /**
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.fragment_navbar, menu)
     }
@@ -69,15 +73,16 @@ class CategoryListFragment : Fragment(), MenuProvider {
             else -> false
         }
     }
+    */
 
     private fun showNewCategory() {
         viewLifecycleOwner.lifecycleScope.launch {
-            val id = categoryListViewModel.addCategory("")
+            //val id = categoryListViewModel.addCategory("")
             showCategory(id)
         }
     }
 
-    private fun showCategory(id : UUID) {
+    private fun showCategory(id : Int) {
         /**findNavController().navigate(
             CategoryListFragmentDirections.showCategory(
                 id

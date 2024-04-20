@@ -16,4 +16,5 @@
     <string name="add_cat">Ajouter une categorie</string>
     <string name="ajouter">Ajouter</string>
     <string name="cancel">Cancel</string>
+    <string name="category_price_placeholder">%s EUR</string>
 </resources>

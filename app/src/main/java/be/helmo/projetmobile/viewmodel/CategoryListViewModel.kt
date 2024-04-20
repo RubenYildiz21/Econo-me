@@ -29,8 +29,8 @@ class CategoryListViewModel : ViewModel() {
         }*/
     }
 
-    suspend fun addCategory(name: String) : UUID {
-        val category = Category(UUID.randomUUID(), name, 0.0)
+    suspend fun addCategory(name: String) : Int {
+        val category = Category(0, name, 0.0)
         categoryRepository.addCategory(category)
         return category.id
     }
