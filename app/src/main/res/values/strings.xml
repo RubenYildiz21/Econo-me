@@ -28,4 +28,16 @@
     <string name="select_source_account">De</string>
     <string name="select_destination_account">Vers</string>
     <string name="addRecurrency">Ajouter une récurrence</string>
+    <string name="new_category">Ajouter une categorie</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="nav_Home">Home</string>
+    <string name="nav_Categories">Categories</string>
+    <string name="nav_Transfert">Transfert</string>
+    <string name="nav_Accounts">Accounts</string>
+    <string name="nav_Statistiques">Statisitiques</string>
+    <string name="add_cat">Ajouter une categorie</string>
+    <string name="category_name_title">Nom de la categorie :\n</string>
+    <string name="category_name_edit_text">Entrez le nom de la categorie ici</string>
+    <string name="revenu">Mes revenus</string>
+    <string name="depense">Mes dépenses</string>
 </resources>
