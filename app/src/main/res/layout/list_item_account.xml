@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewAccountName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_type"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#003366"/>
+
+            <TextView
+                android:id="@+id/textViewAccountBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2083,22€"
+                android:textAppearance="?attr/textAppearanceListItemSecondary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#003366"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
