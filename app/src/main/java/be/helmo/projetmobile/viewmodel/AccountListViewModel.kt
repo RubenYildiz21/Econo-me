@@ -34,4 +34,16 @@ class AccountListViewModel : ViewModel() {
         accountRepository.addCompte(account)
         return account.id
     }
+
+    fun saveOrUpdateAccount(account: Compte) {
+        viewModelScope.launch {
+            if (account.id > 0) {
+                // L'ID existe, donc c'est une mise à jour
+                accountRepository.updateCompte(account)
+            } else {
+                // Pas d'ID, donc c'est une nouvelle entrée
+                accountRepository.addCompte(account)
+            }
+        }
+    }
 }

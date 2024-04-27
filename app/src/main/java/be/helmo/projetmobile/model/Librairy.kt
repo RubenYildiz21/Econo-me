@@ -73,6 +73,7 @@ data class Transfere(
         )
     ]
 )
+
 data class Recurance(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val nom: String,
@@ -105,3 +106,11 @@ data class Transaction(
     val facture: String,
     val type: Boolean
 ) {}
+
+data class CurrencyResponse(
+    val success: Boolean,
+    val timestamp: Long,
+    val base: String,
+    val date: String,
+    val rates: Map<String, Double>
+)

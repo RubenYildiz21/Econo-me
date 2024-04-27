@@ -46,4 +46,13 @@
     <string name="solde_depart">Solde de départ</string>
     <string name="solde_depart_edit_text">Solde</string>
     <string name="select_photo">Veuillez choisir une icone</string>
+
+    <string-array name="currency_array">
+        <item>EUR - Euro</item>
+        <item>USD - US Dollar</item>
+        <item>JPY - Japanese Yen</item>
+        <item>GBP - Livre Sterling</item>
+        <item>CHF - Franc Suisse</item>
+    </string-array>
+
 </resources>

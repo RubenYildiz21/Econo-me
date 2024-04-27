@@ -112,11 +112,12 @@
             </androidx.fragment.app.FragmentContainerView>
         </androidx.cardview.widget.CardView>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:backgroundTint="@color/blue"
             android:id="@+id/addAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
             android:fontFamily="@font/alata"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -139,27 +140,30 @@
             android:orientation="horizontal"
             android:padding="16dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.FloatingActionButton"
+                android:backgroundTint="@color/blue"
                 android:id="@+id/btnTransfer"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_button"
                 android:contentDescription="@string/transfert"
                 android:fontFamily="@font/alata"
                 android:text="@string/transfert"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/white" />
 
-            <Button
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                app:srcCompat="@drawable/ic_add_kot"
+                app:tint="@color/white"
+                android:backgroundTint="@color/blue"
                 android:id="@+id/AddExpense"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:background="@drawable/ic_add_circle"
-                android:focusable="true"
                 android:contentDescription="add_expense_button_description"
-                android:fontFamily="@font/alata"
-                android:tint="#FFFFFF" />
+                android:fontFamily="@font/alata"/>
+
+
         </LinearLayout>
     </LinearLayout>
 
