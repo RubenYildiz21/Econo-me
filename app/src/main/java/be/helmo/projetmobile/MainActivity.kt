@@ -1,11 +1,12 @@
 package be.helmo.projetmobile
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import be.helmo.projetmobile.databinding.ActivityMainBinding
+import be.helmo.projetmobile.view.AccountFragment
+import coil.ImageLoader
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +36,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.accounts -> {
+                    loadFragment(AccountFragment())
+                    true
+                }
+
                 else -> {true}
             }
         }
@@ -45,4 +51,5 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.frameLayoutContainer, fragment)
         transaction.commit()
     }
+
 }

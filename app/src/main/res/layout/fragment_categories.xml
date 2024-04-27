@@ -76,17 +76,18 @@
         app:navGraph="@navigation/nav_graph">-->
     </androidx.fragment.app.FragmentContainerView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:backgroundTint="@color/blue"
         android:id="@+id/addCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/add_button"
         android:text="@string/add_cat"
-        android:textColor="#003366"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:elevation="8dp"
         android:layout_margin="16dp"
         android:padding="8dp"
-        android:orientation="horizontal"
-        android:background="@drawable/round_background_grey"/>
+        android:orientation="horizontal"/>
 </LinearLayout>

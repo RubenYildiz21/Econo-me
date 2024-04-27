@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textViewAccountName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_type"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="#003366"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewAccountBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2083,22€"
+                android:textAppearance="?attr/textAppearanceListItemSecondary"
+                android:textColor="#003366"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/editAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_edit"
+            app:tint="@color/white" />
+
+
+    </LinearLayout>
+</LinearLayout>

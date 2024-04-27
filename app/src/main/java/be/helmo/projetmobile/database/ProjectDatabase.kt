@@ -13,7 +13,7 @@ import be.helmo.projetmobile.model.Transfere
 import be.helmo.projetmobile.model.User
 
 @Database(entities = [Category::class, User::class, Compte::class, Transaction::class, Transfere::class, Recurance::class], version = 1, exportSchema = false)
-@TypeConverters(DateConverter::class)
+@TypeConverters(ItemsConverter::class)
 abstract class ProjectDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDao
