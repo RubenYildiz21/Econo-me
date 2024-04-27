@@ -12,10 +12,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.AccountDialogFragment
+import be.helmo.projetmobile.Mode
 import be.helmo.projetmobile.databinding.FragmentAccountListBinding
-import be.helmo.projetmobile.databinding.FragmentCategoryListBinding
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
-import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import kotlinx.coroutines.launch
 
 class AccountListFragment : Fragment() {
@@ -44,9 +44,7 @@ class AccountListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountListViewModel.account.collect() { accounts ->
                     Log.d("AccountListFragment", "Total accounts: ${accounts.size}")
-                    binding.accountRecyclerView.adapter = AccountListAdapter(accounts) {id ->
-                        showAccount(id)
-                    }
+                    binding.accountRecyclerView.adapter = AccountListAdapter(accounts, ::showAccount, ::showEditAccountDialog)
                 }
             }
         }
@@ -65,5 +63,13 @@ class AccountListFragment : Fragment() {
         id
         )
         )*/
+    }
+
+    private fun showEditAccountDialog(id: Int) {
+        val account = accountListViewModel.account.value.find { it.id == id }
+        if (account != null) {
+            val editDialog = AccountDialogFragment.newInstance(account, Mode.EDIT) // passer le compte à modifier
+            editDialog.show(childFragmentManager, "EditAccount")
+        }
     }
 }

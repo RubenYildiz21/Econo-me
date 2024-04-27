@@ -29,11 +29,6 @@ class AccountListViewModel : ViewModel() {
         }
     }
 
-    suspend fun addCompte(name: String, currency: String, balance: Double) : Int {
-        val account = Compte(0, name, currency, balance)
-        accountRepository.addCompte(account)
-        return account.id
-    }
 
     fun saveOrUpdateAccount(account: Compte) {
         viewModelScope.launch {
