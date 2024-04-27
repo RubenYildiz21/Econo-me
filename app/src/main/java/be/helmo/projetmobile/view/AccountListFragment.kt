@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,32 +45,35 @@ class AccountListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountListViewModel.account.collect() { accounts ->
                     Log.d("AccountListFragment", "Total accounts: ${accounts.size}")
-                    binding.accountRecyclerView.adapter = AccountListAdapter(accounts, ::showAccount, ::showEditAccountDialog)
+                    binding.accountRecyclerView.adapter = AccountListAdapter(accounts, ::showEditAccountDialog, ::deleteAccount)
                 }
             }
         }
     }
 
-    private fun showNewAccount() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            //val id = categoryListViewModel.addCategory("")
-            showAccount(id)
-        }
-    }
-
-    private fun showAccount(id : Int) {
-        /**findNavController().navigate(
-        CategoryListFragmentDirections.showCategory(
-        id
-        )
-        )*/
-    }
 
     private fun showEditAccountDialog(id: Int) {
         val account = accountListViewModel.account.value.find { it.id == id }
         if (account != null) {
             val editDialog = AccountDialogFragment.newInstance(account, Mode.EDIT) // passer le compte à modifier
             editDialog.show(childFragmentManager, "EditAccount")
+        }
+    }
+
+    private fun deleteAccount(id: Int) {
+        val account = accountListViewModel.account.value.find { it.id == id }
+        account?.let { acc ->
+            AlertDialog.Builder(requireContext())
+                .setTitle("ATTENTION")
+                .setMessage("Etes-vous sur de vouloir supprimer ce compte : ${acc.nom}?")
+                .setPositiveButton("Supprimer") { dialog, which ->
+                    accountListViewModel.deleteAccount(acc)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Annuler") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 }

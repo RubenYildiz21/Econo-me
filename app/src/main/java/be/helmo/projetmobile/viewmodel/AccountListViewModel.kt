@@ -41,4 +41,11 @@ class AccountListViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteAccount(account: Compte) {
+        viewModelScope.launch {
+            accountRepository.deleteCompte(account)
+            loadComptes()  // Refresh the list after deletion
+        }
+    }
 }

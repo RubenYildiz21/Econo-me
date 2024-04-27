@@ -21,6 +21,12 @@ class CompteRepository private constructor(val database: ProjectDatabase, privat
         }
     }
 
+    fun deleteCompte(compte: Compte) {
+        coroutineScope.launch {
+            database.compteDao().deleteCompte(compte)
+        }
+    }
+
     companion object {
         private var INSTANCE: CompteRepository? = null
 

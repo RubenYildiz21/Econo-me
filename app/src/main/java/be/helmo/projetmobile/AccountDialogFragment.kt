@@ -1,17 +1,20 @@
 package be.helmo.projetmobile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import be.helmo.projetmobile.databinding.FragmentAccountAddBinding
 import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.Mode
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class AccountDialogFragment : BottomSheetDialogFragment() {
@@ -19,12 +22,12 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
     private lateinit var nameEditText: EditText
     private lateinit var currencyEditText: EditText
     private lateinit var balanceEditText: EditText
+    private lateinit var dialogName: TextView
     private var account: Compte? = null  // Compte pour la modification
     private val accountViewModel: AccountListViewModel by viewModels()
+    private val currencyViewModel: CurrencyViewModel by viewModels()
     private var _binding: FragmentAccountAddBinding? = null
     private val binding get() = _binding!!
-
-
 
     private var mode: Mode = Mode.CREATE
 
@@ -59,10 +62,12 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
         nameEditText = view.findViewById(R.id.accountName)
         currencyEditText = view.findViewById(R.id.accountCurrency)
         balanceEditText = view.findViewById(R.id.accountBalance)
+        dialogName = view.findViewById(R.id.dialogName)
 
         // Mettre à jour le texte du bouton en fonction du mode
         if (mode == Mode.EDIT) {
-            confirmButton.text = "Modifier le compte"
+            confirmButton.text = "Modifier"
+            dialogName.text = "Modifier le compte"
         }
         // Charger les données existantes si en mode 'Modifier'
         account?.let {
@@ -73,16 +78,21 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupCurrencyDropdown() {
-        val currencies = resources.getStringArray(R.array.currency_array)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencies)
-        binding.accountCurrency.setAdapter(adapter)
+
+        currencyViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
+            Log.d("CurrencyDropdown", "Updating currency dropdown with new data: $currencies")
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencies.map { "${it.code} - ${it.name}" })
+            binding.accountCurrency.setAdapter(adapter)
+        }
+        currencyViewModel.fetchCurrencies("68bf113bb26cb8b6af82d7c07b8be2b3")
     }
+
+
     private fun submitData() {
         val name = nameEditText.text.toString()
         val currency = currencyEditText.text.toString()
         val balance = balanceEditText.text.toString().toDouble()
         val updatedAccount = Compte(account?.id ?: 0, name, currency, balance)
-        // Appeler ViewModel pour sauvegarder ou mettre à jour
         accountViewModel.saveOrUpdateAccount(updatedAccount)
         dismiss()
     }
