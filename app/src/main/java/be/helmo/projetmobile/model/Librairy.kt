@@ -9,8 +9,10 @@ import java.util.Date
 import java.util.UUID
 
 @Entity
-data class User(@PrimaryKey(autoGenerate = true) val id: Int, val nom: String, val prenom: String) {
-}
+data class User(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val nom: String,
+    val prenom: String)
 
 @Entity
 data class Compte(

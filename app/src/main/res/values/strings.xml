@@ -46,6 +46,10 @@
     <string name="solde_depart">Solde de départ</string>
     <string name="solde_depart_edit_text">Solde</string>
     <string name="select_photo">Veuillez choisir une icone</string>
+    <string name="user_name">Nom</string>
+    <string name="user_lastname">Prénom</string>
+    <string name="login">Commencer</string>
+    <string name="welcome_message">Bienvenue sur EconoMe</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>

@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import be.helmo.projetmobile.databinding.FragmentHomeBinding
 
-class HomeFragment: Fragment() {
-
+class HomeFragment: HeaderFragment(R.layout.fragment_home) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

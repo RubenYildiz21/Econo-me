@@ -15,7 +15,7 @@ import be.helmo.projetmobile.databinding.FragmentCategoriesBinding
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import kotlinx.coroutines.launch
 
-class CategoriesFragment: Fragment() {
+class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
     private lateinit var binding: FragmentCategoriesBinding
     private val categoryViewModel: CategoryListViewModel by viewModels()
 
