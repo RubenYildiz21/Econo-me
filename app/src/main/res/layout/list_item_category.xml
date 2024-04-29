@@ -10,14 +10,14 @@
     android:orientation="horizontal"
     android:background="@drawable/round_background_grey">
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/image_cat"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:padding="2dp"
         android:src="@drawable/cart_shopping_solid"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"/>-->
 
     <TextView
         android:id="@+id/category_name"
@@ -27,7 +27,7 @@
         android:text="Shopping"
         android:textSize="18sp"
         android:textColor="#003366"
-        app:layout_constraintStart_toEndOf="@id/image_cat"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -40,6 +40,29 @@
         tools:text="158EUR"
         android:textSize="18sp"
         android:textColor="#003366"
+        app:layout_constraintEnd_toStartOf="@id/editCategory"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/blue"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_edit"
+        app:tint="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/deleteCategory"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/deleteCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_delete"
+        app:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

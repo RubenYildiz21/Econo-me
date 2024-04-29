@@ -31,8 +31,10 @@ class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.addCategoryButton.setOnClickListener {
-            showCategoryDialog()
+        binding.confirm.setOnClickListener {
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(childFragmentManager, ModalBottomSheet.TAG)
+            //showCategoryDialog()
         }
     }
 
@@ -41,7 +43,7 @@ class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
      * ajoute la category a la bd
      */
     private fun showCategoryDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.fragment_category_add, null)
+        /**val dialogView = layoutInflater.inflate(R.layout.fragment_category_add, null)
         val editText = dialogView.findViewById<EditText>(R.id.category_name)
 
         AlertDialog.Builder(requireContext())
@@ -56,6 +58,6 @@ class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
                 }
             }
             .setNegativeButton(getString(R.string.cancel), null)
-            .show()
+            .show()*/
     }
 }
