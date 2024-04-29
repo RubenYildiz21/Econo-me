@@ -7,30 +7,7 @@
     android:id="@+id/standard_bottom_sheet"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="#003366"
-        android:elevation="16dp">
-
-        <ImageButton
-            android:layout_marginStart="8dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/user_solid"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome"
-            tools:text="Welcome !"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp" />
-    </LinearLayout>
+    <include layout="@layout/fragment_header"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -89,19 +66,30 @@
             tools:text="158EUR"
             android:textSize="18sp"
             android:textColor="#003366"/>
-    </LinearLayout>-->
+    </LinearLayout>
 
-    <!--<Button
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="be.helmo.projetmobile.view.CategoryListFragment">
+        <!--android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph">-->
+    </androidx.fragment.app.FragmentContainerView>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:backgroundTint="@color/blue"
         android:id="@+id/addCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/add_button"
         android:text="@string/add_cat"
-        android:textColor="#003366"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:elevation="8dp"
         android:layout_margin="16dp"
         android:padding="8dp"
-        android:orientation="horizontal"
-        android:background="@drawable/round_background_grey"/>-->
+        android:orientation="horizontal"/>
 </LinearLayout>

@@ -13,7 +13,7 @@
     <string name="comptes">Comptes</string>
     <string name="categories">Cqtégories</string>
     <string name="addAccount">Ajouter un compte</string>
-    <string name="goToAccoun">Vers mes compte</string>
+    <string name="goToAccount">Vers mes compte</string>
     <string name="account_name">Nom du compte</string>
     <string name="account_description">Description</string>
     <string name="currency">Devise</string>
@@ -40,4 +40,23 @@
     <string name="category_name_edit_text">Entrez le nom de la categorie ici</string>
     <string name="revenu">Mes revenus</string>
     <string name="depense">Mes dépenses</string>
+    <string name="account_name_edit_text">Ajoutez un nom de compte</string>
+    <string name="account_currency_title">Ajouter une devise</string>
+    <string name="account_currency">€, $,...</string>
+    <string name="solde_depart">Solde de départ</string>
+    <string name="solde_depart_edit_text">Solde</string>
+    <string name="select_photo">Veuillez choisir une icone</string>
+    <string name="user_name">Nom</string>
+    <string name="user_lastname">Prénom</string>
+    <string name="login">Commencer</string>
+    <string name="welcome_message">Bienvenue sur EconoMe</string>
+
+    <string-array name="currency_array">
+        <item>EUR - Euro</item>
+        <item>USD - US Dollar</item>
+        <item>JPY - Japanese Yen</item>
+        <item>GBP - Livre Sterling</item>
+        <item>CHF - Franc Suisse</item>
+    </string-array>
+
 </resources>
