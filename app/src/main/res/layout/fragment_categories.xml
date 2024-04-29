@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/standard_bottom_sheet"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -31,7 +32,31 @@
             android:layout_marginLeft="16dp" />
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="be.helmo.projetmobile.view.CategoryListFragment">
+        <!--android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph">-->
+    </androidx.fragment.app.FragmentContainerView>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:elevation="8dp"
+        android:layout_margin="16dp"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:id="@+id/confirm"
+        android:backgroundTint="#003366"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="@string/add_cat">
+    </com.google.android.material.button.MaterialButton>
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="16dp"
@@ -64,19 +89,9 @@
             tools:text="158EUR"
             android:textSize="18sp"
             android:textColor="#003366"/>
-    </LinearLayout>
+    </LinearLayout>-->
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="be.helmo.projetmobile.view.CategoryListFragment">
-        <!--android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph">-->
-    </androidx.fragment.app.FragmentContainerView>
-
-    <Button
+    <!--<Button
         android:id="@+id/addCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,5 +103,5 @@
         android:layout_margin="16dp"
         android:padding="8dp"
         android:orientation="horizontal"
-        android:background="@drawable/round_background_grey"/>
+        android:background="@drawable/round_background_grey"/>-->
 </LinearLayout>

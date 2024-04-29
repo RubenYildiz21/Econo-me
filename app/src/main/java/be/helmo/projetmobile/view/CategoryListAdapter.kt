@@ -2,9 +2,11 @@ package be.helmo.projetmobile.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import be.helmo.projetmobile.databinding.ListItemCategoryBinding
 import be.helmo.projetmobile.model.Category
+import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import java.util.UUID
 
 /**
@@ -23,6 +25,10 @@ class CategoryListAdapter(val categories: List<Category>, private val onCategory
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         holder.bind(categories[position], onCategoryClicked)
+    }
+
+    fun deleteItem(position: Int) {
+
     }
 }
 
