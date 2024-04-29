@@ -1,6 +1,5 @@
 package be.helmo.projetmobile
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,7 +10,6 @@ import be.helmo.projetmobile.databinding.ActivityMainBinding
 import be.helmo.projetmobile.view.AccountFragment
 import be.helmo.projetmobile.viewmodel.UserViewModel
 import be.helmo.projetmobile.viewmodel.UserViewModelFactory
-import coil.ImageLoader
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

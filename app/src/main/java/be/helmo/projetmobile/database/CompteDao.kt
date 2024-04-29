@@ -16,7 +16,7 @@ interface CompteDao {
     fun getComptes(): Flow<List<Compte>>
 
     @Query("SELECT * FROM COMPTE WHERE id=(:compteId)")
-    suspend fun getCompte(compteId: UUID): Compte
+    suspend fun getCompte(compteId: Int): Compte
 
     @Insert
     suspend fun addCompte(compte: Compte)

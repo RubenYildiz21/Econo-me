@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/fragment_header"/>
+    <include layout="@layout/fragment_header"
+        android:id="@+id/topbar"/>
 
         <LinearLayout
             android:id="@+id/accounts"
@@ -53,7 +54,7 @@
         android:textColor="@color/white"
         android:textSize="12sp"/>
     <LinearLayout
-        android:id="@+id/transfertButton"
+        android:id="@+id/transfertBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/accounts"

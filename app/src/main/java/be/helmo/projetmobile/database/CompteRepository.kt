@@ -11,7 +11,7 @@ class CompteRepository private constructor(val database: ProjectDatabase, privat
 
     fun getComptes(): Flow<List<Compte>> = database.compteDao().getComptes()
 
-    suspend fun getCompte(compteId: UUID): Compte = database.compteDao().getCompte(compteId)
+    suspend fun getCompte(compteId: Int): Compte = database.compteDao().getCompte(compteId)
 
     suspend fun addCompte(compte: Compte) = database.compteDao().addCompte(compte)
 

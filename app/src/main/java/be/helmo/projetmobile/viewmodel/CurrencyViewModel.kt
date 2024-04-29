@@ -41,6 +41,30 @@ class CurrencyViewModel : ViewModel() {
         }
     }
 
+    suspend fun getExchangeRate(sourceCurrency: String, destinationCurrency: String): Double {
+        return try {
+            val response = exchangeService.getLatestRates("68bf113bb26cb8b6af82d7c07b8be2b3")
+            val rates = response.body()?.rates ?: return 1.0
+
+            // Gérer le cas où l'euro est impliqué
+            if (sourceCurrency == "EUR") {
+                return rates[destinationCurrency] ?: 1.0
+            } else if (destinationCurrency == "EUR") {
+                val rate = rates[sourceCurrency] ?: return 1.0
+                return 1 / rate // Inverser le taux si on convertit vers l'euro
+            } else {
+                // Autres devises (ni source ni destination ne sont l'euro)
+                val rateToEUR = rates[sourceCurrency] ?: return 1.0
+                val rateFromEURToDest = rates[destinationCurrency] ?: return 1.0
+                return rateFromEURToDest / rateToEUR // Convertir via EUR si nécessaire
+            }
+        } catch (e: Exception) {
+            Log.e("CurrencyViewModel", "Error fetching exchange rate: ${e.message}")
+            1.0  // Return a default or error code
+        }
+    }
+
+
     interface ExchangeServices {
         @GET("latest")
         suspend fun getLatestRates(@Query("access_key") apiKey: String): retrofit2.Response<CurrencyResponse>

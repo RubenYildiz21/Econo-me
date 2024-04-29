@@ -20,8 +20,7 @@ data class Compte(
     val nom: String,
     val devise: String,
     val solde: Double
-) {
-}
+)
 
 @Entity
 data class Category(
@@ -54,8 +53,7 @@ data class Transfere(
     val source: Int,
     val destination: Int,
     val montant: Double
-) {
-}
+)
 
 @Entity(
     foreignKeys = [
