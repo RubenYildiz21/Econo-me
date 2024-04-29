@@ -59,6 +59,11 @@ class TransferDialogFragment : BottomSheetDialogFragment() {
         viewModel.onTransferCompleted = {
             dismiss()
         }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (!errorMessage.isNullOrEmpty()) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun initiateTransfer() {

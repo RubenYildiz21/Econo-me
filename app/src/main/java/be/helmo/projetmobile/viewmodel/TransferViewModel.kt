@@ -1,6 +1,7 @@
 package be.helmo.projetmobile.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.helmo.projetmobile.database.TransfereRepository
@@ -14,6 +15,7 @@ class TransferViewModel(
 ) : ViewModel() {
 
     var onTransferCompleted: (() -> Unit)? = null
+    val errorMessage = MutableLiveData<String>()
     fun performTransfer(sourceAccountName: String, destinationAccountName: String, amount: Double) {
         viewModelScope.launch {
             Log.d("Transfer", "Attempting to transfer $amount from $sourceAccountName to $destinationAccountName")
@@ -23,11 +25,13 @@ class TransferViewModel(
 
             if (sourceAccount == null || destinationAccount == null) {
                 Log.d("Transfer", "Un des comptes est inexistant.")
+                errorMessage.postValue("L'un des comptes spécifiés n'existe pas.")
                 return@launch
             }
 
             if (sourceAccount.solde < amount) {
                 Log.d("Transfer", "Fonds insuffisants.")
+                errorMessage.postValue("Fonds insuffisants pour réaliser le transfert.")
                 return@launch
             }
 
