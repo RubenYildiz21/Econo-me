@@ -7,17 +7,40 @@
     android:id="@+id/standard_bottom_sheet"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/fragment_header"/>
+    <include layout="@layout/fragment_header"
+        android:id="@+id/topbar"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
+    <LinearLayout
+        android:id="@+id/accounts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="be.helmo.projetmobile.view.CategoryListFragment">
-        <!--android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph">-->
-    </androidx.fragment.app.FragmentContainerView>
+        android:gravity="center"
+        android:layout_below="@id/topbar"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="450dp">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAccounts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="12dp"
+                android:elevation="4dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="be.helmo.projetmobile.view.CategoryListFragment">
+                </androidx.fragment.app.FragmentContainerView>
+
+            </androidx.cardview.widget.CardView>
+        </ScrollView>
+    </LinearLayout>
+
+
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
