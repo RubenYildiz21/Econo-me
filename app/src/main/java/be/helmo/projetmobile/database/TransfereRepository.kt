@@ -36,22 +36,24 @@ class TransfereRepository (val database: ProjectDatabase, private val coroutineS
             return
         }
 
-        // Apply exchange rate only if currencies differ
+        // Convert the amount only if currencies differ
         val convertedAmount = if (sourceAccount.devise != destinationAccount.devise) {
             amount * exchangeRate
         } else {
             amount
         }
 
-        // Create new instances with updated balances
+        Log.d("transfereRepository", "amount : ${amount} --- ConvertedAmount : ${convertedAmount}")
+        // Update balances: subtract the original amount from the source and add the converted amount to the destination
         val updatedSourceAccount = sourceAccount.copy(solde = sourceAccount.solde - amount)
         val updatedDestinationAccount = destinationAccount.copy(solde = destinationAccount.solde + convertedAmount)
 
         coroutineScope.launch {
             database.compteDao().updateCompte(updatedSourceAccount)
             database.compteDao().updateCompte(updatedDestinationAccount)
-            val transfere = Transfere(0, source = sourceAccountId, destination = destinationAccountId, montant = amount)
+            val transfere = Transfere(0, source = sourceAccountId, destination = destinationAccountId, montant = convertedAmount)
             database.transferDao().addTransfere(transfere)
+            Log.d("TransferSuccess", "Transfer from ${sourceAccount.nom} to ${destinationAccount.nom} completed: $amount ${sourceAccount.devise} converted to $convertedAmount ${destinationAccount.devise} at rate $exchangeRate")
         }
     }
 

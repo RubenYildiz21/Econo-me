@@ -13,39 +13,46 @@ class TransferViewModel(
     private val accountViewModel: AccountListViewModel
 ) : ViewModel() {
 
+    var onTransferCompleted: (() -> Unit)? = null
     fun performTransfer(sourceAccountName: String, destinationAccountName: String, amount: Double) {
         viewModelScope.launch {
-            // Assurez-vous que les comptes sont chargés
-            accountViewModel.accounts.collect { accounts ->
-                if (accounts.isEmpty()) {
-                    Log.d("Transfer", "Pas de compte disponible pour effectuer un transfert.")
-                }
+            Log.d("Transfer", "Attempting to transfer $amount from $sourceAccountName to $destinationAccountName")
+            val accounts = accountViewModel.accounts.first() // Prend l'état actuel des comptes
+            val sourceAccount = accounts.firstOrNull { it.nom == sourceAccountName }
+            val destinationAccount = accounts.firstOrNull { it.nom == destinationAccountName }
 
-                val sourceAccount = accounts.firstOrNull { it.nom == sourceAccountName }
-                val destinationAccount = accounts.firstOrNull { it.nom == destinationAccountName }
-
-                if (sourceAccount == null || destinationAccount == null) {
-                    Log.d("Transfer", "Un des comptes est inexistant.")
-                    return@collect
-                }
-
-                if (sourceAccount.solde < amount) {
-                    Log.d("Transfer", "Fonds insuffisants.")
-                    return@collect
-                }
-
-                val rate = if (sourceAccount.devise != destinationAccount.devise) {
-                    getExchangeRate(sourceAccount.devise, destinationAccount.devise)
-                } else 1.0
-
-                transfereRepository.transferAmount(sourceAccount.id, destinationAccount.id, amount, rate)
+            if (sourceAccount == null || destinationAccount == null) {
+                Log.d("Transfer", "Un des comptes est inexistant.")
+                return@launch
             }
+
+            if (sourceAccount.solde < amount) {
+                Log.d("Transfer", "Fonds insuffisants.")
+                return@launch
+            }
+
+            val sourceCurrencyCode = sourceAccount.devise.split(" - ")[0]
+            val destinationCurrencyCode = destinationAccount.devise.split(" - ")[0]
+
+            val rate = if (sourceAccount.devise != destinationAccount.devise) {
+                try {
+                    Log.d("TransferViewModel", "Source currency : ${sourceAccount.devise} --- Destination currency : ${destinationAccount.devise}")
+                    currencyViewModel.getExchangeRate(sourceCurrencyCode, destinationCurrencyCode)
+                } catch (e: Exception) {
+                    Log.e("TransferViewModel", "Error fetching exchange rate: ${e.message}")
+                    1.0  // Fallback rate in case of failure
+                }
+            } else {
+                1.0
+            }
+
+
+            transfereRepository.transferAmount(sourceAccount.id, destinationAccount.id, amount, rate)
+            onTransferCompleted?.invoke()
+
+
+            Log.d("Transfer", "Transfer completed: $amount from ${sourceAccount.nom} to ${destinationAccount.nom} at rate $rate")
         }
     }
 
-
-    // Assume this method exists and correctly fetches exchange rates
-    suspend fun getExchangeRate(sourceCurrency: String, destinationCurrency: String): Double {
-        return currencyViewModel.getExchangeRate(sourceCurrency, destinationCurrency)
-    }
 }
