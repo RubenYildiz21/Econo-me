@@ -41,6 +41,16 @@ class CurrencyViewModel : ViewModel() {
         }
     }
 
+    suspend fun getExchangeRate(sourceCurrency: String, destinationCurrency: String): Double {
+        return try {
+            val response = exchangeService.getLatestRates("68bf113bb26cb8b6af82d7c07b8be2b3") // Replace "your_access_key" with actual API key
+            response.body()?.rates?.get(destinationCurrency) ?: 1.0
+        } catch (e: Exception) {
+            Log.e("CurrencyViewModel", "Error fetching exchange rate: ${e.message}")
+            1.0  // Return a default or error code
+        }
+    }
+
     interface ExchangeServices {
         @GET("latest")
         suspend fun getLatestRates(@Query("access_key") apiKey: String): retrofit2.Response<CurrencyResponse>

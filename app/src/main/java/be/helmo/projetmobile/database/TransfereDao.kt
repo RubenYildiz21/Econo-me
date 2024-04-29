@@ -15,7 +15,7 @@ interface TransfereDao {
     fun getTransferes(): Flow<List<Transfere>>
 
     @Query("SELECT * FROM TRANSFERE WHERE id=(:transfereId)")
-    suspend fun getTransfere(transfereId: UUID): Transfere
+    suspend fun getTransfere(transfereId: Int): Transfere
 
     @Insert
     suspend fun addTransfere(transfere: Transfere)
