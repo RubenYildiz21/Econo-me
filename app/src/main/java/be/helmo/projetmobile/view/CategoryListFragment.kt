@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.CategoryDialogFragment
+import be.helmo.projetmobile.Mode
 import be.helmo.projetmobile.R
 import be.helmo.projetmobile.databinding.FragmentCategoryListBinding
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
@@ -51,11 +54,34 @@ class CategoryListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 categoryListViewModel.categories.collect() { categories ->
                     Log.d("CategoryListFragment", "Total categories: ${categories.size}")
-                    binding.categoryRecyclerView.adapter = CategoryListAdapter(categories) {id ->
-                        showCategory(id)
-                    }
+                    binding.categoryRecyclerView.adapter = CategoryListAdapter(categories, ::showEditAccountDialog, ::deleteCat)
                 }
             }
+        }
+    }
+
+    private fun showEditAccountDialog(id: Int) {
+        val account = categoryListViewModel.categories.value.find { it.id == id }
+        if (account != null) {
+            val editDialog = CategoryDialogFragment.newInstance(account, Mode.EDIT)
+            editDialog.show(childFragmentManager, "EditCategory")
+        }
+    }
+
+    private fun deleteCat(id: Int) {
+        val category = categoryListViewModel.categories.value.find { it.id == id }
+        category?.let { cat ->
+            AlertDialog.Builder(requireContext())
+                .setTitle("ATTENTION")
+                .setMessage("Etes-vous sur de vouloir supprimer ce compte : ${cat.nom}?")
+                .setPositiveButton("Supprimer") { dialog, which ->
+                    categoryListViewModel.deleteCat(cat)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Annuler") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 

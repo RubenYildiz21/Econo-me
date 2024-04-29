@@ -21,6 +21,12 @@ class CategoryRepository private constructor(val database: ProjectDatabase, priv
         }
     }
 
+    fun deleteCat(cat: Category) {
+        coroutineScope.launch {
+            database.categoryDao().deleteCat(cat)
+        }
+    }
+
     companion object {
         private var INSTANCE: CategoryRepository? = null
 
