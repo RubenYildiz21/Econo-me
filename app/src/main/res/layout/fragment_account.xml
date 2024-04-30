@@ -76,14 +76,13 @@
             android:gravity="start"
             android:layout_weight="0.5">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/AddExpense"
+                android:id="@+id/btnTransfer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_kot"
+                android:src="@drawable/ic_transfert"
                 app:tint="@color/white"
                 android:backgroundTint="@color/blue"
-                android:contentDescription="@string/add_expense"
-                android:layout_marginStart="16dp"/>
+                android:contentDescription="@string/transfert"/>
         </LinearLayout>
 
         <LinearLayout
@@ -93,13 +92,15 @@
             android:gravity="end"
             android:layout_weight="0.5">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnTransfer"
+                android:id="@+id/AddExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_transfert"
+                android:src="@drawable/ic_add_kot"
                 app:tint="@color/white"
                 android:backgroundTint="@color/blue"
-                android:contentDescription="@string/transfert"/>
+                android:contentDescription="@string/add_expense"
+                android:layout_marginStart="16dp"/>
+
         </LinearLayout>
 
 

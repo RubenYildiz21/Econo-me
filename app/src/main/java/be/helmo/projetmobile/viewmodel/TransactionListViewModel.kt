@@ -85,7 +85,7 @@ class TransactionListViewModel(
 
             if (acc != null) {
                 if (acc.solde < montant) {
-                    errorMessage.postValue("La catégorie spécifié n'existe pas")
+                    errorMessage.postValue("Le solde disponible sur le compte ${acc.nom} n'est pas suffisant")
                     return@launch
                 }
             }

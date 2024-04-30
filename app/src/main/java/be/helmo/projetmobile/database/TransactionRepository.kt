@@ -20,10 +20,10 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
 
     suspend fun addTransaction(transaction: Transaction) {
         val account = database.compteDao().getCompte(transaction.compteId)
-        val updateAmountCompte = account.copy(solde = account.solde + transaction.solde)
+        val updateAmountCompte = account.copy(solde = account.solde - transaction.solde)
 
         val category = database.categoryDao().getCategory(transaction.categoryId)
-        val updateAmountCategory = category.copy(solde = category.solde - transaction.solde)
+        val updateAmountCategory = category.copy(solde = category.solde + transaction.solde)
 
         coroutineScope.launch {
             database.compteDao().updateCompte(updateAmountCompte)
