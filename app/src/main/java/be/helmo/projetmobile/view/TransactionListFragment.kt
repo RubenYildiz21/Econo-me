@@ -26,7 +26,6 @@ import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import kotlinx.coroutines.launch
 
 class TransactionListFragment: Fragment() {
-    private val transactionListViewModel: TransactionListViewModel by viewModels()
     private val viewModel: TransactionListViewModel by viewModels {
         TransactionViewModelFactory(
             TransactionRepository.get(),
@@ -36,7 +35,6 @@ class TransactionListFragment: Fragment() {
     }
 
     private lateinit var binding: FragmentTransactionListBinding
-    //private lateinit var bindingMont: FragmentTransactionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +43,6 @@ class TransactionListFragment: Fragment() {
     ): View {
         binding = FragmentTransactionListBinding.inflate(inflater, container, false)
         binding.transactionRecyclerView.layoutManager = LinearLayoutManager(context)
-        //bindingMont = FragmentTransactionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,19 +56,6 @@ class TransactionListFragment: Fragment() {
                 }
             }
         }
-
-        /**bindingMont.month.setOnItemClickListener { parent, view, position, id ->
-            val months = resources.getStringArray(R.array.months_array)
-            val selectedMonth = months[position]
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.loadTransactionsByMonth(selectedMonth)
-                    viewModel.transaction.collect() { transactions ->
-                        binding.transactionRecyclerView.adapter = TransactionListAdapter(transactions, ::showEditAccountDialog, ::deleteAccount)
-                    }
-                }
-            }
-        }*/
     }
 
     fun updateTransactionsByMonth(selectedMonth: Int) {
@@ -103,7 +87,7 @@ class TransactionListFragment: Fragment() {
         transac?.let { trans ->
             AlertDialog.Builder(requireContext())
                 .setTitle("ATTENTION")
-                .setMessage("Etes-vous sur de vouloir supprimer ce compte : ${trans.nom}?")
+                .setMessage("Etes-vous sur de vouloir supprimer cette transaction : ${trans.nom}?")
                 .setPositiveButton("Supprimer") { dialog, which ->
                     viewModel.deleteTransaction(trans)
                     dialog.dismiss()
