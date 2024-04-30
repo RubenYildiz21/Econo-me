@@ -1,6 +1,7 @@
 package be.helmo.projetmobile.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -22,4 +23,7 @@ interface TransactionDao {
 
     @Update
     suspend fun updateTransaction(transaction: Transaction)
+
+    @Delete
+    suspend fun deleteTransaction(transaction: Transaction)
 }

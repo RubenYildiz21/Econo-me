@@ -11,7 +11,6 @@ import be.helmo.projetmobile.databinding.ActivityMainBinding
 import be.helmo.projetmobile.view.AccountFragment
 import be.helmo.projetmobile.viewmodel.UserViewModel
 import be.helmo.projetmobile.viewmodel.UserViewModelFactory
-import coil.ImageLoader
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +47,11 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.accounts -> {
                     loadFragment(AccountFragment(), true)
+                    true
+                }
+
+                R.id.transaction ->  {
+                    loadFragment(TransactionFragment(), true)
                     true
                 }
 

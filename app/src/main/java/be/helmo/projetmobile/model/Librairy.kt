@@ -91,7 +91,14 @@ data class Recurance(
         ForeignKey(
             entity = Category::class,
             parentColumns = ["id"],
-            childColumns = ["category"],
+            childColumns = ["categoryId"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Compte::class,
+            parentColumns = ["id"],
+            childColumns = ["compteId"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
@@ -100,8 +107,8 @@ data class Recurance(
 data class Transaction(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val nom: String,
-    val icone: String,
-    val category: Int,
+    val categoryId: Int,
+    val compteId: Int,
     val date: Date,
     val solde: Double,
     val lieu: String,

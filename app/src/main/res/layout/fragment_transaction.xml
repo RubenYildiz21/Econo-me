@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="16dp">
+
+        <RelativeLayout
+            android:id="@+id/rectangleRevenus"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_rectangle_green"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/descriptionRevenus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/revenu"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/amountRevenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="50€"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rectangleDepense"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_rectangle_red"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/descriptionDepense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/depense"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/amountDepense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100€"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Filtre par mois -->
+    <Spinner
+        android:id="@+id/monthFilterSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/months_array" />
+
+    <LinearLayout
+        android:id="@+id/transactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAccounts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="12dp"
+                android:elevation="4dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="be.helmo.projetmobile.view.TransactionListFragment">
+                </androidx.fragment.app.FragmentContainerView>
+
+            </androidx.cardview.widget.CardView>
+        </ScrollView>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        app:srcCompat="@drawable/ic_add_kot"
+        app:tint="@color/white"
+        android:backgroundTint="@color/blue"
+        android:id="@+id/AddTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:contentDescription="add_expense_button_description"
+        android:fontFamily="@font/alata"/>
+
+</LinearLayout>

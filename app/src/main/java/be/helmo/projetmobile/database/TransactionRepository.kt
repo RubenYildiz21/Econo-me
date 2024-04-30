@@ -1,6 +1,7 @@
 package be.helmo.projetmobile.database
 
 import be.helmo.projetmobile.model.Category
+import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +20,12 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
     fun updateTransaction(transaction: Transaction) {
         coroutineScope.launch {
             database.transactionDao().updateTransaction(transaction)
+        }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        coroutineScope.launch {
+            database.transactionDao().deleteTransaction(transaction)
         }
     }
 
