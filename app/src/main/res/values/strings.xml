@@ -11,7 +11,7 @@
     <string name="accueil">Accueil</string>
     <string name="statistiques">Statistiques</string>
     <string name="comptes">Comptes</string>
-    <string name="categories">Cqtégories</string>
+    <string name="categories">Catégories</string>
     <string name="addAccount">Ajouter un compte</string>
     <string name="goToAccount">Vers mes compte</string>
     <string name="account_name">Nom du compte</string>
@@ -50,6 +50,14 @@
     <string name="user_lastname">Prénom</string>
     <string name="login">Commencer</string>
     <string name="welcome_message">Bienvenue sur EconoMe</string>
+    <string name="transaction">Transaction</string>
+    <string name="addTransaction">Ajouter une transaction</string>
+    <string name="transaction_name">Nom de la transaction</string>
+    <string name="solde_transaction">Montant</string>
+    <string name="nav_Transaction">Transactions</string>
+    <string name="select_category_prompt">Sélectionner la catégorie</string>
+    <string name="select_acoount_prompt">Sélectionner le compte</string>
+    <string name="filtre_month">Filtrer par mois</string>
     <string name="add_expense">ajouter une transaction</string>
 
     <string-array name="currency_array">
@@ -58,6 +66,21 @@
         <item>JPY - Japanese Yen</item>
         <item>GBP - Livre Sterling</item>
         <item>CHF - Franc Suisse</item>
+    </string-array>
+
+    <string-array name="months_array">
+        <item>Janvier</item>
+        <item>Février</item>
+        <item>Mars</item>
+        <item>Avril</item>
+        <item>Mai</item>
+        <item>Juin</item>
+        <item>Juillet</item>
+        <item>Août</item>
+        <item>Septembre</item>
+        <item>Octobre</item>
+        <item>Novembre</item>
+        <item>Décembre</item>
     </string-array>
 
 </resources>

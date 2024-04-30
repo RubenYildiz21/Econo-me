@@ -24,10 +24,6 @@ class CategoryListViewModel : ViewModel() {
                 _categories.value = it
             }
         }
-
-        /**for (i in 0 until 5) {
-            categories += Category(UUID.randomUUID(), "Category $i")
-        }*/
     }
 
     suspend fun addCategory(name: String) : Int {

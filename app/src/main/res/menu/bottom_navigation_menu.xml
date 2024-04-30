@@ -30,9 +30,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/transfert"
+        android:id="@+id/transaction"
         android:enabled="true"
         android:icon="@drawable/ic_transfert"
-        android:title="@string/transfert"
+        android:title="@string/transaction"
         app:showAsAction="ifRoom"/>
 </menu>

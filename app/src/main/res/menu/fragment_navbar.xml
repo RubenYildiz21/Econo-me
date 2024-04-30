@@ -22,8 +22,8 @@
         android:title="@string/nav_Categories"/>
 
     <item
-        android:id="@+id/transfert"
+        android:id="@+id/transaction"
         android:icon="@drawable/ic_transfert"
-        android:title="@string/nav_Transfert"/>
+        android:title="@string/nav_Transaction"/>
 
 </menu>
