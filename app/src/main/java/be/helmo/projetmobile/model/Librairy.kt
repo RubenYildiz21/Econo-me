@@ -111,7 +111,8 @@ data class Transaction(
     val solde: Double,
     val lieu: String,
     val facture: String,
-    val type: Boolean
+    val type: Boolean,
+    val devise: String
 ) {}
 
 data class CurrencyResponse(
