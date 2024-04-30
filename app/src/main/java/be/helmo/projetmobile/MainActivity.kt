@@ -55,6 +55,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.statistiques -> {
+                    loadFragment(StatistiqueFragment(), true)
+                    true
+                }
+
                 else -> {true}
             }
         }
@@ -80,4 +85,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

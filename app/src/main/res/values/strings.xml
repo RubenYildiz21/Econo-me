@@ -59,6 +59,9 @@
     <string name="select_acoount_prompt">Sélectionner le compte</string>
     <string name="filtre_month">Filtrer par mois</string>
     <string name="add_expense">ajouter une transaction</string>
+    <string name="month">Mois actuel</string>
+    <string name="year">Année actuelle</string>
+    <string name="categoriesPerMonth">Catégories ce mois-ci</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>
