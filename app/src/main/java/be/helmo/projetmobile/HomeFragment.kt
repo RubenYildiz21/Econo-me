@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import be.helmo.projetmobile.databinding.FragmentHomeBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
@@ -37,39 +39,75 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
     }
 
     private fun setupPieChartRevenus(pieChart: PieChart) {
-        val entries: MutableList<PieEntry> = ArrayList()
-        entries.add(PieEntry(50f))
-        entries.add(PieEntry(30f))
-        val dataSet = PieDataSet(entries, "Revenus")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-        val pieData = PieData(dataSet)
-        pieChart.setData(pieData)
-        pieChart.description = null
-        pieChart.isDrawHoleEnabled = true
-        pieChart.setHoleColor(Color.WHITE)
-        pieChart.transparentCircleRadius = 61f
+        val entries = mutableListOf(
+            PieEntry(50f, "Catégorie 1"),
+            PieEntry(30f, "Catégorie 2")
+        )
 
-        // Ajouter une animation
-        pieChart.animateY(1400, Easing.EaseInOutQuad)
-        pieChart.invalidate() // refresh le graphique
+        val dataSet = PieDataSet(entries, "Revenus").apply { // Laissez le label vide si vous ne voulez pas de titre sur la légende
+            setColors(*ColorTemplate.MATERIAL_COLORS)
+            valueFormatter = PercentFormatter(pieChart)
+            setDrawValues(false)
+        }
+
+        val pieData = PieData(dataSet).apply {
+            setValueTextSize(12f)
+            setValueTextColor(Color.WHITE)
+        }
+
+        pieChart.apply {
+            data = pieData
+            description.text = ""
+            isDrawHoleEnabled = true
+            setHoleColor(Color.WHITE)
+            setUsePercentValues(true)
+            setDrawEntryLabels(false) // Ne pas dessiner les labels des tranches
+            legend.isEnabled = true
+            legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+            legend.orientation = Legend.LegendOrientation.VERTICAL
+            legend.setDrawInside(false)
+            animateY(1400, Easing.EaseInOutQuad)
+            invalidate()
+        }
     }
+
+
 
     private fun setupPieChartDepenses(pieChart: PieChart) {
-        val entries: MutableList<PieEntry> = ArrayList()
-        entries.add(PieEntry(70f))
-        entries.add(PieEntry(20f))
-        val dataSet = PieDataSet(entries, "Dépenses")
-        dataSet.setColors(*ColorTemplate.JOYFUL_COLORS)
-        val pieData = PieData(dataSet)
-        pieChart.setData(pieData)
-        pieChart.description = null
-        pieChart.isDrawHoleEnabled = true
-        pieChart.setHoleColor(Color.WHITE)
-        pieChart.transparentCircleRadius = 61f
+        val entries = mutableListOf(
+            PieEntry(70f, "Catégorie A"),
+            PieEntry(20f, "Catégorie B")
+        )
 
-        // Ajouter une animation
-        pieChart.animateY(1400, Easing.EaseInOutQuad)
-        pieChart.invalidate() // refresh le graphique
+        val dataSet = PieDataSet(entries, "").apply { // Laissez le label vide si vous ne voulez pas de titre sur la légende
+            setColors(*ColorTemplate.JOYFUL_COLORS)
+            valueFormatter = PercentFormatter(pieChart) // Assurez-vous que les pourcentages sont formatés correctement
+            setDrawValues(false) // Ne pas dessiner les valeurs à l'intérieur des tranches
+        }
+
+        val pieData = PieData(dataSet).apply {
+            setValueTextSize(12f)
+            setValueTextColor(Color.WHITE)
+        }
+
+        pieChart.apply {
+            data = pieData
+            description.text = ""
+            isDrawHoleEnabled = true
+            setHoleColor(Color.WHITE)
+            setUsePercentValues(true)
+            setDrawEntryLabels(false) // Ne pas dessiner les labels des tranches
+            legend.isEnabled = true
+            legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+            legend.orientation = Legend.LegendOrientation.VERTICAL
+            legend.setDrawInside(false)
+            animateY(1400, Easing.EaseInOutQuad)
+            invalidate()
+        }
     }
+
+
 
 }

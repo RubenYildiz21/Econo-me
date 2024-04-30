@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <include layout="@layout/fragment_header"
+            android:id="@+id/topbar"/>
+
+        <!-- Statistiques du mois actuel -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/month"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="@font/alata"
+            android:textAlignment="center"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartMonthly"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Statistiques de l'année actuelle -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/year"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="@font/alata"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartYearly"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Liste des dépenses par catégories pour le mois actuel -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/categoriesPerMonth"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="@font/alata"
+            android:layout_marginTop="14dp"
+            android:textAlignment="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>
