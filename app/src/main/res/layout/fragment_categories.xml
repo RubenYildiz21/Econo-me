@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/standard_bottom_sheet"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/fragment_header"
-        android:id="@+id/topbar"/>
-
     <LinearLayout
-        android:id="@+id/accounts"
+        android:id="@+id/standard_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@id/topbar"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp">
-        <ScrollView
+        android:orientation="vertical">
+
+        <include layout="@layout/fragment_header"
+            android:id="@+id/topbar"/>
+
+        <LinearLayout
+            android:id="@+id/accounts"
             android:layout_width="match_parent"
-            android:layout_height="450dp">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardAccounts"
                 android:layout_width="match_parent"
@@ -37,66 +38,20 @@
                 </androidx.fragment.app.FragmentContainerView>
 
             </androidx.cardview.widget.CardView>
-        </ScrollView>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:elevation="8dp"
+            android:layout_margin="16dp"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:id="@+id/confirm"
+            android:backgroundTint="#003366"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="@string/add_cat"/>
+
     </LinearLayout>
-
-
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:elevation="8dp"
-        android:layout_margin="16dp"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:id="@+id/confirm"
-        android:backgroundTint="#003366"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:text="@string/add_cat">
-    </com.google.android.material.button.MaterialButton>
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="16dp"
-        android:layout_margin="16dp"
-        android:padding="8dp"
-        android:orientation="horizontal"
-        android:background="@drawable/round_background_grey">
-
-        <ImageView
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:padding="2dp"
-            android:src="@drawable/cart_shopping_solid"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="Shopping"
-            android:textSize="18sp"
-            android:textColor="#003366"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            tools:text="158EUR"
-            android:textSize="18sp"
-            android:textColor="#003366"/>
-    </LinearLayout>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="be.helmo.projetmobile.view.CategoryListFragment">
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph">-->
-</LinearLayout>
+</ScrollView>

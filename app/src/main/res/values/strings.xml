@@ -50,6 +50,7 @@
     <string name="user_lastname">Prénom</string>
     <string name="login">Commencer</string>
     <string name="welcome_message">Bienvenue sur EconoMe</string>
+    <string name="add_expense">ajouter une transaction</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>
