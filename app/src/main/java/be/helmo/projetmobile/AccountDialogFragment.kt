@@ -23,7 +23,7 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
     private lateinit var currencyEditText: EditText
     private lateinit var balanceEditText: EditText
     private lateinit var dialogName: TextView
-    private var account: Compte? = null  // Compte pour la modification
+    private var account: Compte? = null
     private val accountViewModel: AccountListViewModel by viewModels()
     private val currencyViewModel: CurrencyViewModel by viewModels()
     private var _binding: FragmentAccountAddBinding? = null
@@ -81,7 +81,7 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
 
         currencyViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
             Log.d("CurrencyDropdown", "Updating currency dropdown with new data: $currencies")
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencies.map { "${it.code} - ${it.name}" })
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencies.map { "${it.code}" })
             binding.accountCurrency.setAdapter(adapter)
         }
         currencyViewModel.fetchCurrencies("68bf113bb26cb8b6af82d7c07b8be2b3")

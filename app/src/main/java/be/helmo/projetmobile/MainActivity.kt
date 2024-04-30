@@ -1,6 +1,5 @@
 package be.helmo.projetmobile
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels

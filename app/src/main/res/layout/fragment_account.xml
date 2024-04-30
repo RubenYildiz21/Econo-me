@@ -2,22 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/fragment_header" android:id="@+id/topbar"/>
+    <include layout="@layout/fragment_header"
+        android:id="@+id/topbar"/>
 
-        <LinearLayout
-            android:id="@+id/accounts"
+    <ScrollView
+        android:id="@+id/scrollContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topbar"
+        android:fillViewport="true">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_below="@id/topbar"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp">
-            <ScrollView
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/accounts"
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardAccounts"
                     android:layout_width="match_parent"
@@ -26,71 +33,78 @@
                     app:cardCornerRadius="12dp"
                     android:elevation="4dp">
 
-                        <androidx.fragment.app.FragmentContainerView
-                            android:id="@+id/fragment_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:name="be.helmo.projetmobile.view.AccountListFragment">
-                        </androidx.fragment.app.FragmentContainerView>
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fragment_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:name="be.helmo.projetmobile.view.AccountListFragment"/>
 
                 </androidx.cardview.widget.CardView>
-            </ScrollView>
-        </LinearLayout>
+            </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:backgroundTint="@color/blue"
-        android:layout_below="@+id/accounts"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/addAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/alata"
-        android:layout_marginTop="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:text="@string/addAccount"
-        android:textColor="@color/white"
-        android:textSize="12sp"/>
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.FloatingActionButton"
+                android:id="@+id/addAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue"
+                android:layout_centerHorizontal="true"
+                android:text="@string/addAccount"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:fontFamily="@font/alata"
+                android:textSize="12sp"
+                android:layout_below="@id/accounts"/>
+        </RelativeLayout>
+    </ScrollView>
+
     <LinearLayout
-        android:id="@+id/transfertButton"
+        android:id="@+id/floatingButtonContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/accounts"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="bottom"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.FloatingActionButton"
-                android:backgroundTint="@color/blue"
-                android:id="@+id/btnTransfer"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:contentDescription="@string/transfert"
-                android:fontFamily="@font/alata"
-                android:text="@string/transfert"
-                android:textColor="@color/white" />
-
+            android:layout_alignParentBottom="true"
+            android:gravity="start"
+            android:layout_weight="0.5">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                app:srcCompat="@drawable/ic_add_kot"
-                app:tint="@color/white"
-                android:backgroundTint="@color/blue"
                 android:id="@+id/AddExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:contentDescription="add_expense_button_description"
-                android:fontFamily="@font/alata"/>
-
-
+                android:src="@drawable/ic_add_kot"
+                app:tint="@color/white"
+                android:backgroundTint="@color/blue"
+                android:contentDescription="@string/add_expense"
+                android:layout_marginStart="16dp"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="end"
+            android:layout_weight="0.5">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnTransfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_transfert"
+                app:tint="@color/white"
+                android:backgroundTint="@color/blue"
+                android:contentDescription="@string/transfert"/>
+        </LinearLayout>
+
+
+
+
     </LinearLayout>
 
 </RelativeLayout>

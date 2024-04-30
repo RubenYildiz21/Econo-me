@@ -58,6 +58,7 @@
     <string name="select_category_prompt">Sélectionner la catégorie</string>
     <string name="select_acoount_prompt">Sélectionner le compte</string>
     <string name="filtre_month">Filtrer par mois</string>
+    <string name="add_expense">ajouter une transaction</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>

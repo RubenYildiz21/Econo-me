@@ -2,12 +2,14 @@ package be.helmo.projetmobile.view
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import be.helmo.projetmobile.AccountDialogFragment
 import be.helmo.projetmobile.HeaderFragment
 import be.helmo.projetmobile.Mode
+import be.helmo.projetmobile.TransferDialogFragment
 import be.helmo.projetmobile.databinding.FragmentAccountBinding
 
 class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_categories) {
@@ -33,8 +35,14 @@ class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_c
 
 
         binding.btnTransfer.setOnClickListener {
-            // implémenter
+            showTransferDialog()
         }
+    }
+
+    private fun showTransferDialog() {
+        Log.d("AccountFragment", "Entry showTransferDialog")
+        val transferDialog = TransferDialogFragment.newInstance()
+        transferDialog.show(childFragmentManager, "TransferDialog")
     }
 
 

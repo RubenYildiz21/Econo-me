@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="16dp">
+        android:layout_marginStart="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,8 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="#003366"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/alata"/>
 
             <TextView
                 android:id="@+id/textViewAccountBalance"
@@ -39,7 +40,8 @@
                 android:textAppearance="?attr/textAppearanceListItemSecondary"
                 android:textColor="#003366"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/alata"/>
         </LinearLayout>
 
 
