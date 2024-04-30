@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import be.helmo.projetmobile.database.UserRepository
 import be.helmo.projetmobile.databinding.ActivityMainBinding
 import be.helmo.projetmobile.view.AccountFragment
+import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.UserViewModel
 import be.helmo.projetmobile.viewmodel.UserViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -80,5 +81,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

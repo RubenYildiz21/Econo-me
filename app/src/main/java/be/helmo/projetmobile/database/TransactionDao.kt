@@ -26,4 +26,7 @@ interface TransactionDao {
 
     @Delete
     suspend fun deleteTransaction(transaction: Transaction)
+
+    @Query("SELECT * FROM 'TRANSACTION' WHERE strftime('%m', date) = :month")
+    fun getTransactionsByMonth(month: String): Flow<List<Transaction>>
 }

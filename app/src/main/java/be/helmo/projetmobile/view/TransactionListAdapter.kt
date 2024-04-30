@@ -33,8 +33,8 @@ class TransactionListAdapter(
         fun bind(transaction: Transaction, onEditClicked: (transactionId: Int) -> Unit, onDeleteClicked: (transactionId: Int) -> Unit) {
             binding.transactionName.text = transaction.nom
             binding.transactionPrice.text = "${transaction.solde}"
-            binding.categoryName.text = transaction.category.toString()
-            binding.compteName.text = transaction.type.toString()
+            binding.categoryName.text = transaction.categoryId.toString()
+            binding.compteName.text = transaction.compteId.toString()
             binding.editAccount.setOnClickListener {
                 onEditClicked(transaction.id)
             }
