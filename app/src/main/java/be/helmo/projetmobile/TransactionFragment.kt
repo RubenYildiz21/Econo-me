@@ -55,6 +55,14 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         super.onViewCreated(view, savedInstanceState)
         setupMonthDropdown()
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                binding.amountRevenu.text = viewModel.getAllRevenu().toString()
+                val depense = viewModel.getAllDepense().toString()
+                binding.amountDepense.text = depense
+            }
+        }
+
         binding.month.setOnItemClickListener { parent, view, position, id ->
             val months = resources.getStringArray(R.array.months_array)
             val selectedMonth = months[position]

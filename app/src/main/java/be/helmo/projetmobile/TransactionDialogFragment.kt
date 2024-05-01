@@ -121,6 +121,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountListViewModel.account.collect { account ->
+                    accounts = account
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
@@ -175,10 +176,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             photoFile.renameTo(newPhotoFile)
 
             onPhotoComplete?.invoke()
-            /**facturePhoto.doOnLayout {
-            val photo = getScaledBitmap(newPhotoFile.path, it.width, it.height)
-            facturePhoto.setImageBitmap(photo)
-            }*/
         } else {
             facturePhoto.setImageResource(R.drawable.camera_solid)
         }

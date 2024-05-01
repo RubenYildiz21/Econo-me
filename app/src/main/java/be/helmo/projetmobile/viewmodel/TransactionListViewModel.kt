@@ -109,4 +109,42 @@ class TransactionListViewModel(
             loadTransactions()  // Refresh the list after deletion
         }
     }
+
+    suspend fun getAllRevenu(): Double {
+        var totalRevenu = 0.0
+
+        viewModelScope.launch {
+            // Collecting the StateFlow<List<Transaction>>
+            transaction.collect { transactions ->
+                // Looping through each transaction in the list
+                for (transaction in transactions) {
+                    // Checking if transaction.type is true
+                    if (transaction.type) {
+                        // Adding the solde to the total revenu
+                        totalRevenu += transaction.solde
+                    }
+                }
+            }
+        }.join()
+        return totalRevenu
+    }
+
+    suspend fun getAllDepense(): Double {
+        var totalDepense = 0.0
+
+        viewModelScope.launch {
+            // Collecting the StateFlow<List<Transaction>>
+            transaction.collect { transactions ->
+                // Looping through each transaction in the list
+                for (transaction in transactions) {
+                    // Checking if transaction.type is true
+                    if (!transaction.type) {
+                        // Adding the solde to the total revenu
+                        totalDepense += transaction.solde
+                    }
+                }
+            }
+        }.join()
+        return totalDepense
+    }
 }

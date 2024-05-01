@@ -2,6 +2,7 @@ package be.helmo.projetmobile.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,8 @@ class TransactionListFragment: Fragment() {
             ViewModelProvider(requireActivity()).get(CategoryListViewModel::class.java)
         )
     }
+    private val accountViewModel: AccountListViewModel by viewModels()
+    private val categoryViewModel: CategoryListViewModel by viewModels()
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
 
@@ -105,6 +108,9 @@ class TransactionListFragment: Fragment() {
                 .setMessage("Etes-vous sur de vouloir supprimer cette transaction : ${trans.nom}?")
                 .setPositiveButton("Supprimer") { dialog, which ->
                     viewModel.deleteTransaction(trans)
+                    categoryViewModel.updateCategoryAfterDelete(trans.solde, trans.categoryId)
+                    accountViewModel.updateAccountAfterDelete(trans.solde, trans.compteId, trans.type)
+                    setupTransactionList()
                     dialog.dismiss()
                 }
                 .setNegativeButton("Annuler") { dialog, which ->

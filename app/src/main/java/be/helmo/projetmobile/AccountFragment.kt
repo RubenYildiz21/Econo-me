@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import be.helmo.projetmobile.AccountDialogFragment
 import be.helmo.projetmobile.HeaderFragment
 import be.helmo.projetmobile.Mode
@@ -16,6 +17,12 @@ import be.helmo.projetmobile.databinding.FragmentAccountBinding
 class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_categories) {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+
+        }
+    }
+
 
 
     override fun onCreateView(
@@ -40,7 +47,7 @@ class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_c
         }
 
         binding.AddExpense.setOnClickListener {
-            val addDialog = TransactionDialogFragment.newInstance(null, Mode.CREATE)
+            val addDialog = TransactionDialogFragment.newInstance(null, Mode.EDIT, takePictureLauncher)
             addDialog.show(childFragmentManager, "AddTransaction")
         }
     }

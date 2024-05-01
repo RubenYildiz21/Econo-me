@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.view
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -53,6 +54,11 @@ class TransactionListAdapter(
             }
             binding.compteName.text = transaction.compteId.toString()
             binding.transactionPrice.text = String.format("%.2f", transaction.solde)
+            if (transaction.type) {
+                binding.transactionPrice.setTextColor(Color.GREEN)
+            } else {
+                binding.transactionPrice.setTextColor(Color.RED)
+            }
             binding.categoryName.text = getCategoryNameById(transaction.categoryId)
             binding.compteName.text = getAccountNameById(transaction.compteId)
             binding.transactionCurrency.text = transaction.devise
