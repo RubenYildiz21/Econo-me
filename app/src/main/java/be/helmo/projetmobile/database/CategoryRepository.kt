@@ -18,6 +18,8 @@ class CategoryRepository private constructor(val database: ProjectDatabase, priv
 
     fun getCategoriesByYear(year: String): Flow<List<Category>> = database.categoryDao().getCategoriesByYear(year)
 
+    fun getTransactionType(transactionType: Boolean): Flow<List<Category>> = database.categoryDao().getTypeTransactions(transactionType)
+
     suspend fun addCategory(category: Category) = database.categoryDao().addCategory(category)
 
 

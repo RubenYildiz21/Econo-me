@@ -13,32 +13,23 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
-import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewModelScope
-import be.helmo.placereport.view.getScaledBitmap
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
 import be.helmo.projetmobile.model.Transaction
-import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
 import java.util.Date
-import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
 import be.helmo.projetmobile.model.Compte
 
 class TransactionDialogFragment: BottomSheetDialogFragment() {
@@ -149,6 +140,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                 categoryListViewModel.categories.collect { categories ->
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
+                    /*
                     transaction?.let { transaction ->
                         val categoryId = transaction.categoryId
                         val position = categories.indexOfFirst { it.id == categoryId }
@@ -156,6 +148,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                             binding.categorySpinner.setSelection(position)
                         }
                     }
+                     */
                 }
             }
         }

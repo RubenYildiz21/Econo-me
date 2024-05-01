@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,9 +31,8 @@ class CurrencyViewModel : ViewModel() {
             try {
                 val response = exchangeService.getLatestRates(apiKey)
                 if (response.isSuccessful && response.body() != null) {
-                    val rates = response.body()!!.rates
-                    val currencyList = rates.map { Currency(it.key, it.value.toString()) }
-                    _currencies.postValue(currencyList)
+                    val rates = response.body()!!.rates.map { Currency(it.key, it.value.toString()) }
+                    _currencies.postValue(rates)
                     Log.d("CurrencyFetch", "Currencies fetched successfully: ${_currencies.value}")
                 } else {
                     Log.e("CurrencyFetch", "Failed to fetch currencies: ${response.errorBody()?.string()}")
@@ -62,6 +64,21 @@ class CurrencyViewModel : ViewModel() {
             Log.e("CurrencyViewModel", "Error fetching exchange rate: ${e.message}")
             1.0  // Return a default or error code
         }
+    }
+
+    fun getExchangeRates(apiKey: String): Flow<Map<String, Double>> = flow {
+        val response = exchangeService.getLatestRates(apiKey)
+        if (response.isSuccessful && response.body() != null) {
+            emit(response.body()!!.rates)
+            Log.e("CurrencyViewModel", "fetched rates: ${response.body()}")
+        } else {
+            Log.e("CurrencyViewModel", "Failed to fetch rates: ${response.errorBody()?.string()}")
+            throw Exception("Failed to fetch rates")  // Lever une exception en cas d'erreur
+        }
+    }.catch { e ->
+        // Log l'erreur et émet une map vide
+        Log.e("CurrencyViewModel", "Error in fetching currency rates: ${e.message}", e)
+        emit(emptyMap())
     }
 
 
