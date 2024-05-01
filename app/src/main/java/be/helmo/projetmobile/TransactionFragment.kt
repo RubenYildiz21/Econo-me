@@ -16,6 +16,7 @@ import be.helmo.projetmobile.databinding.FragmentTransactionBinding
 import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import kotlinx.coroutines.launch

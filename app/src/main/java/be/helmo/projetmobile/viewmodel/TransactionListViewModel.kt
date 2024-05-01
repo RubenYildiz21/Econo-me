@@ -96,16 +96,24 @@ class TransactionListViewModel(
             val category = categoryViewModel.categories.first()
             val cat = category.firstOrNull { it.nom == categoryName }
 
+            val currency = acc?.devise.toString()
             if (acc != null) {
-                if (acc.solde < montant) {
-                    errorMessage.postValue("La catégorie spécifié n'existe pas")
-                    return@launch
+                Log.d("TransactionListViewModel", "Type de transaction : ${transaction.type}")
+                if (!transaction.type){
+                    if (acc.solde < montant) {
+                        errorMessage.postValue("Le solde disponible sur le compte ${acc.nom} n'est pas suffisant")
+                        return@launch
+                    }
                 }
             }
 
             newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", transaction.facture, transaction.type)
         }.join()
         return newTransaction
+            val transaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", "", transaction.type, currency)
+            transactionRepository.addTransaction(transaction)
+            onTransactionComplete?.invoke()
+        }
     }
 
     fun deleteTransaction(transaction: Transaction) {

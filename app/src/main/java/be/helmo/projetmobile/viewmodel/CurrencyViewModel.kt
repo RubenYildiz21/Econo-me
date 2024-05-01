@@ -69,6 +69,25 @@ class CurrencyViewModel : ViewModel() {
         @GET("latest")
         suspend fun getLatestRates(@Query("access_key") apiKey: String): retrofit2.Response<CurrencyResponse>
     }
+
+    companion object {
+        private val exchangeService: ExchangeServices by lazy {
+            Retrofit.Builder()
+                .baseUrl("http://api.exchangeratesapi.io/v1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ExchangeServices::class.java)
+        }
+        suspend fun getRate(currency: String): Double {
+            return try {
+                val response = exchangeService.getLatestRates("68bf113bb26cb8b6af82d7c07b8be2b3")
+                response.body()?.rates?.get(currency) ?: 1.0
+            } catch (e: Exception) {
+                Log.e("CurrencyViewModel", "Error fetching rate for $currency: ${e.message}")
+                1.0
+            }
+        }
+    }
 }
 
 data class CurrencyResponse(

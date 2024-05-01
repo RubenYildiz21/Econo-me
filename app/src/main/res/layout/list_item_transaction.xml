@@ -27,8 +27,8 @@
                 android:text="@string/account_type"
                 android:textAllCaps="true"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="#003366"
-                android:textSize="15sp"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -41,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:text="Shopping"
                     android:textAppearance="?attr/textAppearanceListItemSecondary"
-                    android:textColor="#003366"
-                    android:textSize="13sp"
+                    android:textColor="@color/blue"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/compteName"
@@ -51,8 +51,8 @@
                     android:text="Cash"
                     android:paddingLeft="8dp"
                     android:textAppearance="?attr/textAppearanceListItemSecondary"
-                    android:textColor="#003366"
-                    android:textSize="13sp"
+                    android:textColor="@color/blue"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -63,9 +63,18 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:gravity="center"
-            tools:text="158EUR"
-            android:textSize="18sp"
-            android:textColor="#003366"/>
+            tools:text="158"
+            android:textSize="13sp"
+            android:textColor="@color/blue"/>
+        <TextView
+            android:id="@+id/transactionCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:gravity="center"
+            tools:text="EUR"
+            android:textSize="13sp"
+            android:textColor="@color/blue"/>
 
         <ImageView
             android:id="@+id/showFacture"

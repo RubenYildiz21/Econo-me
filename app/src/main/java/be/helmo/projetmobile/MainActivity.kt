@@ -25,10 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        /**val headerLayout = LayoutInflater.from(this).inflate(R.layout.fragment_header, null)
-        supportActionBar?.setDisplayShowCustomEnabled(true)
-        supportActionBar?.customView = headerLayout
-        supportActionBar?.setDisplayShowTitleEnabled(false)*/
 
 
         bottomNav = binding.bottomNav
@@ -53,6 +49,11 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.transaction ->  {
                     loadFragment(TransactionFragment(), true)
+                    true
+                }
+
+                R.id.statistiques -> {
+                    loadFragment(StatistiqueFragment(), true)
                     true
                 }
 
@@ -81,4 +82,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

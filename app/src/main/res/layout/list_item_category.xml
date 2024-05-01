@@ -12,27 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="15dp">
+        android:gravity="center">
 
         <TextView
             android:id="@+id/category_name"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Shopping"
             android:textSize="17sp"
             android:textColor="#003366"
-            android:gravity="center_vertical"
+            android:gravity="left"
             android:layout_weight="0.3"
             android:fontFamily="@font/alata"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/category_price"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:gravity="center_vertical|end"
+            android:gravity="center|end"
             tools:text="158EUR"
-            android:textSize="13sp"
+            android:textSize="11sp"
             android:textColor="#003366"
             android:layout_weight="0.2"
             android:fontFamily="@font/alata"
@@ -58,10 +58,4 @@
             android:gravity="center"/>
 
     </LinearLayout>
-
-
-
-
-
-
 </LinearLayout>
