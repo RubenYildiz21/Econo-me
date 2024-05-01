@@ -1,5 +1,6 @@
 package be.helmo.projetmobile
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,24 +8,37 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.FileProvider
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
+import be.helmo.placereport.view.getScaledBitmap
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
 import be.helmo.projetmobile.model.Transaction
+import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Calendar
 import java.util.Date
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
 
 class TransactionDialogFragment: BottomSheetDialogFragment() {
     private lateinit var confirmButton: Button
@@ -44,14 +58,19 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
     private val accountListViewModel: AccountListViewModel by viewModels()
 
     private lateinit var binding: FragmentTransactionAddBinding
-
     private var mode: Mode = Mode.CREATE
+    private lateinit var takePicture: ActivityResultLauncher<Uri>
+    private lateinit var photoFileName: String
+    private var onPhotoComplete: (() -> Unit)? = null
 
     companion object {
-        fun newInstance(transaction: Transaction?, mode: Mode): TransactionDialogFragment {
+        fun newInstance(transaction: Transaction?, mode: Mode, takePictureLauncher: ActivityResultLauncher<Uri>?): TransactionDialogFragment {
             val fragment = TransactionDialogFragment()
             fragment.transaction = transaction
             fragment.mode = mode
+            if (takePictureLauncher != null) {
+                fragment.takePicture = takePictureLauncher
+            }
             return fragment
         }
     }
@@ -61,6 +80,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTransactionAddBinding.inflate(inflater, container, false)
+        photoFileName = ""
         return binding.root
     }
 
@@ -70,9 +90,27 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         loadCategories()
         loadAccounts()
+        //loadPhotoFileName()
 
-        confirmButton.setOnClickListener {
+        if (transaction?.facture != null) {
+            photoFileName = transaction?.facture.toString()
+        } else {
+            val tokenLength = 10 // Longueur du token
+            photoFileName = generateRandomToken(tokenLength)
+        }
+        val facturePhoto = binding.facturePhoto
+        facturePhoto.setOnClickListener {
+            val photoFile = File(requireContext().applicationContext.filesDir, photoFileName)
+            val photoUri = FileProvider.getUriForFile(requireContext(), "be.helmo.projetmobile.fileprovider", photoFile)
+            takePicture.launch(photoUri)
+        }
+
+        binding.AddTransaction.setOnClickListener {
             submitData()
+        }
+
+        viewModel.onTransactionComplete = {
+            dismiss()
         }
     }
 
@@ -83,6 +121,13 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
+                        transaction?.let { transaction ->
+                            val accountId = transaction.compteId
+                            val position = account.indexOfFirst { it.id == accountId }
+                            if (position != -1) {
+                                binding.accountSpinner.setSelection(position)
+                            }
+                        }
                     }
                 }
             }
@@ -100,6 +145,13 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                 categoryListViewModel.categories.collect { categories ->
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
+                    transaction?.let { transaction ->
+                        val categoryId = transaction.categoryId
+                        val position = categories.indexOfFirst { it.id == categoryId }
+                        if (position != -1) {
+                            binding.categorySpinner.setSelection(position)
+                        }
+                    }
                 }
             }
         }
@@ -108,6 +160,25 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
     private fun updateCategoriesDropdown(name: List<String>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, name)
         binding.categorySpinner.setAdapter(adapter)
+    }
+
+    private fun updatePhoto(facturePhoto: ImageButton, photoFileName: String) {
+        val photoFile = File(requireContext().applicationContext.filesDir, "t.jpg")
+        if (photoFile.exists()) {
+            // Construire le nouveau nom de fichier
+            val newPhotoFile = File(photoFile.parentFile, photoFileName)
+
+            // Renommer le fichier
+            photoFile.renameTo(newPhotoFile)
+
+            onPhotoComplete?.invoke()
+            /**facturePhoto.doOnLayout {
+                val photo = getScaledBitmap(newPhotoFile.path, it.width, it.height)
+                facturePhoto.setImageBitmap(photo)
+            }*/
+        } else {
+            facturePhoto.setImageResource(R.drawable.camera_solid)
+        }
     }
 
     private fun setupViews(view: View) {
@@ -122,7 +193,21 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
         // Charger les données existantes si en mode 'Modifier'
         transaction?.let {
+            onPhotoComplete = null
+            viewModel.onTransactionComplete = null
             nameEditText.setText(it.nom)
+            binding.transactionPrice.setText(it.solde.toString())
+
+            // Extraction de l'année, du mois et du jour de la date de la transaction
+            val calendar = Calendar.getInstance()
+            calendar.time = transaction?.date ?: Date()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // Mise à jour du DatePicker avec la date de la transaction
+            binding.datePicker.init(year, month, day, null)
+
         }
     }
 
@@ -157,12 +242,10 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             type = false
         }
 
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", "", type)
-        //transactionViewModel.saveOrUpdateTransaction(updatedTransaction)
-        viewModel.createTransaction(compte, category, montant, updatedTransaction)
-        viewModel.onTransactionComplete = {
-            dismiss()
-        }
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", photoFileName, type)
+        updatePhoto(binding.facturePhoto, photoFileName)
+        viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
@@ -185,4 +268,12 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         return calendar.time
     }
+
+    fun generateRandomToken(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9') // Caractères autorisés pour le token
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
+
 }

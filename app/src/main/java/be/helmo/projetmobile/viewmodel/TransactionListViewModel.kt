@@ -34,6 +34,8 @@ class TransactionListViewModel(
     val transaction : StateFlow<List<Transaction>>
         get() = _transaction.asStateFlow()
 
+    var transac: Transaction? = null
+
     init {
         loadTransactions()
     }
@@ -47,11 +49,6 @@ class TransactionListViewModel(
     }
 
     fun loadTransactionsByMonth(month: Int) {
-        /**viewModelScope.launch {
-            transactionRepository.getTransactionsByMonth(month).collect { listOfTransac ->
-                _transaction.value = listOfTransac
-            }
-        }*/
         val filteredTransactions = _transaction.value.filter { transaction ->
             val cal = Calendar.getInstance()
             cal.time = transaction.date
@@ -61,21 +58,37 @@ class TransactionListViewModel(
     }
 
 
-    fun saveOrUpdateTransaction(transaction: Transaction) {
+    fun saveOrUpdateTransaction(compte: String, category: String, montant: Double, transaction: Transaction) {
         viewModelScope.launch {
             if (transaction.id > 0) {
                 // L'ID existe, donc c'est une mise à jour
-                transactionRepository.updateTransaction(transaction)
+                val newT = createTransaction(compte, category, montant, transaction)
+                if (newT != null) {
+                    transactionRepository.updateTransaction(newT)
+                    onTransactionComplete?.invoke()
+                }
             } else {
-                // Pas d'ID, donc c'est une nouvelle entrée
-                transactionRepository.addTransaction(transaction)
+                val newT = createTransaction(compte, category, montant, transaction)
+                if (newT != null) {
+                    transactionRepository.addTransaction(newT)
+                    onTransactionComplete?.invoke()
+                }
             }
         }
     }
 
+    fun getLastTransac() {
+        viewModelScope.launch {
+            val transactions = transaction.first()
+            transac = transactions.lastOrNull()
+        }
+    }
+
+
     var errorMessage = MutableLiveData<String>()
     var onTransactionComplete: (() -> Unit)? = null
-    fun createTransaction(accountName: String, categoryName: String, montant: Double, transaction: Transaction) {
+    suspend fun createTransaction(accountName: String, categoryName: String, montant: Double, transaction: Transaction): Transaction? {
+        var newTransaction: Transaction? = null
         viewModelScope.launch {
             val accounts = accountViewModel.accounts.first()
             val acc = accounts.firstOrNull { it.nom == accountName}
@@ -90,10 +103,9 @@ class TransactionListViewModel(
                 }
             }
 
-            val transaction = Transaction(transaction?.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", "", transaction.type)
-            transactionRepository.addTransaction(transaction)
-            onTransactionComplete?.invoke()
-        }
+            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", transaction.facture, transaction.type)
+        }.join()
+        return newTransaction
     }
 
     fun deleteTransaction(transaction: Transaction) {

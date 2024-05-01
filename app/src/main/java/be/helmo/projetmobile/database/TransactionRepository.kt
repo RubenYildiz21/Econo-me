@@ -29,7 +29,7 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
             database.compteDao().updateCompte(updateAmountCompte)
             database.categoryDao().updateCategory(updateAmountCategory)
             database.transactionDao().addTransaction(transaction)
-        }
+        }.join()
     }
 
     fun updateTransaction(transaction: Transaction) {
