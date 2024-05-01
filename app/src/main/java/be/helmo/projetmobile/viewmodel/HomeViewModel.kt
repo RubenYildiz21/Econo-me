@@ -20,48 +20,42 @@ class HomeViewModel(private val transactionRepository: TransactionRepository, pr
     val expenseData: LiveData<List<Category>> = _expenseData
 
     init {
-        // Fetch currencies once or refresh periodically
-        currencyViewModel.fetchCurrencies("68bf113bb26cb8b6af82d7c07b8be2b3")
-
-        // Observe changes in currency data and reload transactions
-        currencyViewModel.currencies.observeForever {
-            loadTransactions()
-        }
+        loadCategoryData(true)
+        loadCategoryData(false)
     }
 
-    fun loadTransactions() {
+    private fun loadCategoryData(type: Boolean) {
         viewModelScope.launch {
+            Log.d("HomeViewModel", "entry loadCategoryData()")
             try {
-                val transactions = transactionRepository.getTransactions().first()
-                Log.d("HomeViewModel", "Transactions loaded: ${transactions.size}")
+                categoryRepository.getTransactionType(type).collect { categories ->
+                    Log.d("HomeViewModel", "Revenue categories loaded: ${categories.size}")
+                    if (categories.isNotEmpty() && type){
+                        _revenueData.postValue(categories)
+                    }else{
+                        _expenseData.postValue(categories)
+                        Log.d("HomeViewModel", "No revenue data available")
+                    }
 
-                // Use the latest rates from currencyViewModel
-                val rates = currencyViewModel.currencies.value?.associate { it.code to it.name.toDouble() } ?: mapOf()
-                val convertedTransactions = transactions.map { transaction ->
-                    val rate = rates[transaction.devise] ?: 1.0  // Default to 1.0 if the rate is not found
-                    transaction.copy(solde = transaction.solde * rate)
                 }
-                processTransactions(convertedTransactions.filter { it.type }, _revenueData)
-                processTransactions(convertedTransactions.filterNot { it.type }, _expenseData)
             } catch (e: Exception) {
-                Log.e("HomeViewModel", "Error loading transactions: ${e.message}")
+                Log.e("HomeViewModel", "Error loading categories: ${e.message}")
             }
         }
     }
 
 
-    private suspend fun processTransactions(
-        transactions: List<Transaction>,
-        liveData: MutableLiveData<List<Category>>
-    ) {
-        val categories = transactions.groupBy { it.categoryId }.map { (categoryId, trans) ->
-            Category(
-                id = categoryId,
-                nom = getCategoryNameById(categoryId),
-                solde = trans.sumOf { it.solde }
-            )
+    private suspend fun processTransactions(transactions: List<Category>, isRevenue: Boolean) {
+        val categorySums = transactions.groupBy { it.id }.map { entry ->
+            val categoryName = categoryRepository.getCategory(entry.key).nom
+            val sum = entry.value.sumOf { it.solde }
+            Category(entry.key, categoryName, sum)
         }
-        liveData.postValue(categories)
+        if (isRevenue) {
+            _revenueData.postValue(categorySums)
+        } else {
+            _expenseData.postValue(categorySums)
+        }
     }
 
 

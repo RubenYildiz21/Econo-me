@@ -33,7 +33,7 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewModel.loadTransactions()
+        setupObserver()
         Log.d("HomeFragment", "Transaction loaded")
         return binding!!.root
     }
@@ -62,8 +62,8 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
     }
 
     private fun setupPieChart(pieChart: PieChart, data: List<Category>, label: String) {
-        val entries = data.map { PieEntry(it.solde.toFloat(), it.nom) } // Ensure each entry has a label
-        val dataSet = PieDataSet(entries, "").apply { // Empty string for dataset label
+        val entries = data.map { PieEntry(it.solde.toFloat(), it.nom) }
+        val dataSet = PieDataSet(entries, "").apply {
             setColors(*ColorTemplate.MATERIAL_COLORS)
             valueTextColor = Color.WHITE
             valueTextSize = 12f

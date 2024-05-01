@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.time.Month
 import java.util.UUID
 
 class TransactionRepository (val database: ProjectDatabase, private val coroutineScope: CoroutineScope = GlobalScope) {
@@ -19,6 +18,7 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
     fun getTransactionsByMonth(month: String): Flow<List<Transaction>> = database.transactionDao().getTransactionsByMonth(month)
 
     suspend fun getTransaction(transactionId: UUID): Transaction = database.transactionDao().getTransaction(transactionId)
+
 
     suspend fun addTransaction(transaction: Transaction) {
         val account = database.compteDao().getCompte(transaction.compteId)
