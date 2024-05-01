@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.viewmodel
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
@@ -83,14 +84,18 @@ class TransactionListViewModel(
             val category = categoryViewModel.categories.first()
             val cat = category.firstOrNull { it.nom == categoryName }
 
+            val currency = acc?.devise.toString()
             if (acc != null) {
-                if (acc.solde < montant) {
-                    errorMessage.postValue("La catégorie spécifié n'existe pas")
-                    return@launch
+                Log.d("TransactionListViewModel", "Type de transaction : ${transaction.type}")
+                if (!transaction.type){
+                    if (acc.solde < montant) {
+                        errorMessage.postValue("Le solde disponible sur le compte ${acc.nom} n'est pas suffisant")
+                        return@launch
+                    }
                 }
             }
 
-            val transaction = Transaction(transaction?.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", "", transaction.type)
+            val transaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", "", transaction.type, currency)
             transactionRepository.addTransaction(transaction)
             onTransactionComplete?.invoke()
         }

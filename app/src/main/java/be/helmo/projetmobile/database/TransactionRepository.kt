@@ -1,8 +1,10 @@
 package be.helmo.projetmobile.database
 
+import android.util.Log
 import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -20,10 +22,27 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
 
     suspend fun addTransaction(transaction: Transaction) {
         val account = database.compteDao().getCompte(transaction.compteId)
-        val updateAmountCompte = account.copy(solde = account.solde + transaction.solde)
+        var updateAmountCompte: Compte
+        if (transaction.type){
+            updateAmountCompte = account.copy(solde = account.solde + transaction.solde)
+        }else{
+            updateAmountCompte = account.copy(solde = account.solde - transaction.solde)
+        }
 
+        val rate = if (account.devise != "EUR") {
+            try {
+                CurrencyViewModel.getRate(account.devise)
+            } catch (e: Exception) {
+                Log.e("TransferViewModel", "Error fetching exchange rate: ${e.message}")
+                1.0  // Fallback rate in case of failure
+            }
+        } else {
+            1.0
+        }
+
+        val finalAmount = transaction.solde / rate
         val category = database.categoryDao().getCategory(transaction.categoryId)
-        val updateAmountCategory = category.copy(solde = category.solde - transaction.solde)
+        val updateAmountCategory = category.copy(solde = category.solde + finalAmount)
 
         coroutineScope.launch {
             database.compteDao().updateCompte(updateAmountCompte)

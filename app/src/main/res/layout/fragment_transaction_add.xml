@@ -1,119 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    android:padding="24dp">
-
-    <TextView
-        android:id="@+id/dialogName"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/addTransaction"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:textStyle="bold"/>
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/transactionName"
+        <TextView
+            android:id="@+id/dialogName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/transaction_name"
-            android:textColor="@color/blue"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="@string/addTransaction"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/blue"
+            android:textStyle="bold"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp">
-        <AutoCompleteTextView
-            android:id="@+id/categorySpinner"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/select_category_prompt"
-            android:inputType="none"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/transactionName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/transaction_name"
+                android:textColor="@color/blue"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/dateSelect">
-
-        <AutoCompleteTextView
-            android:id="@+id/dateEditText"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Select Date"
-            android:focusable="false"
-            android:inputType="none" />
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+            <AutoCompleteTextView
+                android:id="@+id/typeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_type"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:visibility="visible" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp">
-        <AutoCompleteTextView
-            android:id="@+id/accountSpinner"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/select_acoount_prompt"
-            android:inputType="none"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+            <AutoCompleteTextView
+                android:id="@+id/categorySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_category_prompt"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/transactionPrice"
+
+        <DatePicker
+            android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/solde_transaction"
-            android:inputType="numberDecimal"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/AddTransaction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Créer une transaction"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:backgroundTint="@color/blue"
-        android:textColor="@color/white"/>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+            <AutoCompleteTextView
+                android:id="@+id/accountSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_acoount_prompt"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/transactionPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/solde_transaction"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/AddTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Créer une transaction"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

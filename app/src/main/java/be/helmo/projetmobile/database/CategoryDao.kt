@@ -19,6 +19,16 @@ interface CategoryDao {
     @Query("SELECT * FROM CATEGORY WHERE id=(:categoryId)")
     suspend fun getCategory(categoryId: Int): Category
 
+
+    @Query("SELECT * FROM Category WHERE id IN (SELECT categoryId FROM `Transaction` WHERE strftime('%m', datetime(date / 1000, 'unixepoch')) = :month)")
+    fun getCategoriesByMonth(month: String): Flow<List<Category>>
+
+
+
+    @Query("SELECT * FROM Category WHERE id IN (SELECT categoryId FROM `Transaction` WHERE strftime('%Y', datetime(date / 1000, 'unixepoch')) = :year)")
+    fun getCategoriesByYear(year: String): Flow<List<Category>>
+
+
     @Insert
     suspend fun addCategory(category: Category)
 

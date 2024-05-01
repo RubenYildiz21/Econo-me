@@ -1,6 +1,7 @@
 package be.helmo.projetmobile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
+import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -47,6 +50,8 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
     private var mode: Mode = Mode.CREATE
 
+    private var accounts: List<Compte> = listOf()
+
     companion object {
         fun newInstance(transaction: Transaction?, mode: Mode): TransactionDialogFragment {
             val fragment = TransactionDialogFragment()
@@ -70,6 +75,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         loadCategories()
         loadAccounts()
+        updateTransactionType()
 
         confirmButton.setOnClickListener {
             submitData()
@@ -78,13 +84,10 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                accountListViewModel.account.collect { account ->
-                    if (account.isNotEmpty()) {
-                        val name = account.map { "${it.nom} (${it.devise})"}
-                        updateAccountDropdown(name)
-                    }
-                }
+            accountListViewModel.accounts.collect { loadedAccounts ->
+                accounts = loadedAccounts
+                val accountNames = loadedAccounts.map { "${it.nom} (${it.devise})" }
+                updateAccountDropdown(accountNames)
             }
         }
     }
@@ -104,6 +107,24 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             }
         }
     }
+
+    private fun updateTransactionType() {
+        // Chargez les types de transactions à partir des ressources.
+        val transactionTypes = resources.getStringArray(R.array.transaction_type)
+
+        // Créer un ArrayAdapter utilisant un layout simple pour le dropdown.
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypes)
+
+        // Assurez-vous que votre layout a un AutoCompleteTextView ou Spinner avec l'ID approprié.
+        binding.typeSpinner.setAdapter(adapter)
+
+        // Si vous gérez les types de transactions pour les éditer, vous pouvez définir le type actuel ici.
+        transaction?.let {
+            val typeIndex = transactionTypes.indexOf(if (it.type) "Revenu" else "Dépense")
+            binding.typeSpinner.setText(transactionTypes[typeIndex], false)
+        }
+    }
+
 
     private fun updateCategoriesDropdown(name: List<String>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, name)
@@ -133,11 +154,19 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             Toast.makeText(context, "Veuillez entrer un nom pour la transaction.", Toast.LENGTH_LONG).show()
             return
         }
+
+        val typetransaction = binding.typeSpinner.text.toString()
+        if (typetransaction == ""){
+            Toast.makeText(context, "Veuillez choisir un type pour la transaction.", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val category = binding.categorySpinner.text.toString()
         if (category == "") {
             Toast.makeText(context, "Veuillez selctionner une categorie.", Toast.LENGTH_LONG).show()
             return
         }
+
         val compte = binding.accountSpinner.text.toString().split(" (")[0]
         if (compte == "") {
             Toast.makeText(context, "Veuillez selctionner un compte.", Toast.LENGTH_LONG).show()
@@ -145,19 +174,25 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
         val date = getDate()
         val montantString = binding.transactionPrice.text.toString()
-        if (montantString == "") {
-            Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
-            return
-        }
-        val montant: Double = montantString.toDoubleOrNull() ?: 0.0
-        var type = true
-        if (montant >= 0) {
-            type = true
-        } else {
-            type = false
+        if (typetransaction.equals("Dépense")){
+            if (montantString == "") {
+                Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
+                return
+            }
         }
 
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", "", type)
+        val montant: Double = montantString.toDoubleOrNull() ?: 0.0
+
+        var type = true
+        if (typetransaction == "Dépense") {
+            type = false
+        } else {
+            type = true
+        }
+
+        val selectedAccount = accounts.find { it.nom == compte }
+        val currency = selectedAccount?.devise.toString()
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", "", type, currency)
         //transactionViewModel.saveOrUpdateTransaction(updatedTransaction)
         viewModel.createTransaction(compte, category, montant, updatedTransaction)
         viewModel.onTransactionComplete = {

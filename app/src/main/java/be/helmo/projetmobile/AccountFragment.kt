@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import be.helmo.projetmobile.AccountDialogFragment
 import be.helmo.projetmobile.HeaderFragment
 import be.helmo.projetmobile.Mode
+import be.helmo.projetmobile.TransactionDialogFragment
 import be.helmo.projetmobile.TransferDialogFragment
 import be.helmo.projetmobile.databinding.FragmentAccountBinding
 
@@ -36,6 +37,11 @@ class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_c
 
         binding.btnTransfer.setOnClickListener {
             showTransferDialog()
+        }
+
+        binding.AddExpense.setOnClickListener {
+            val addDialog = TransactionDialogFragment.newInstance(null, Mode.CREATE)
+            addDialog.show(childFragmentManager, "AddTransaction")
         }
     }
 

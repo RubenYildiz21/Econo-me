@@ -21,8 +21,10 @@ import be.helmo.projetmobile.databinding.FragmentTransactionBinding
 import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class TransactionListFragment: Fragment() {
@@ -35,7 +37,8 @@ class TransactionListFragment: Fragment() {
     }
 
     private lateinit var binding: FragmentTransactionListBinding
-
+    private val accountListViewModel: AccountListViewModel by viewModels()
+    private val categoryListViewModel: CategoryListViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,11 +51,30 @@ class TransactionListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTransactionList()
+    }
 
+    private fun setupTransactionList() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.transaction.collect() { transactions ->
-                    binding.transactionRecyclerView.adapter = TransactionListAdapter(transactions, ::showEditAccountDialog, ::deleteAccount)
+                combine(
+                    viewModel.transaction,
+                    accountListViewModel.account,
+                    categoryListViewModel.categories
+                ) { transactions, accounts, categories ->
+                    Triple(transactions, accounts, categories)
+                }.collect { (transactions, accounts, categories) ->
+                    if (transactions.isNotEmpty() && accounts.isNotEmpty() && categories.isNotEmpty()) {
+                        binding.transactionRecyclerView.adapter = TransactionListAdapter(
+                            transactions,
+                            accounts,
+                            categories,
+                            ::showEditAccountDialog,
+                            ::deleteAccount
+                        )
+                    } else {
+                        Log.d("Debug", "Data missing: Transactions or Accounts or Categories")
+                    }
                 }
             }
         }
@@ -60,17 +82,7 @@ class TransactionListFragment: Fragment() {
 
     fun updateTransactionsByMonth(selectedMonth: Int) {
         viewModel.loadTransactionsByMonth(selectedMonth)
-        refreshTransac()
-    }
-
-    private fun refreshTransac() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.transaction.collect() { transactions ->
-                    binding.transactionRecyclerView.adapter = TransactionListAdapter(transactions, ::showEditAccountDialog, ::deleteAccount)
-                }
-            }
-        }
+        setupTransactionList()
     }
 
 

@@ -39,7 +39,7 @@ class CategoryListAdapter(
 class CategoryHolder(val binding: ListItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(category: Category, onEditClicked: (categoryId: Int) -> Unit, onDeleteClicked: (accountId: Int) -> Unit) {
         binding.categoryName.text = category.nom
-        binding.categoryPrice.text = "${category.solde} EUR"
+        binding.categoryPrice.text = String.format("%.2fEUR", category.solde)
         binding.editCategory.setOnClickListener {
             onEditClicked(category.id)
         }
