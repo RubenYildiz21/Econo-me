@@ -147,7 +147,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 categoryListViewModel.categories.collect { categories ->
-                    val name = categories.map { "${it.nom}"}
+                    val name = categories.map { it.nom }
                     updateCategoriesDropdown(name)
                     transaction?.let { transaction ->
                         val categoryId = transaction.categoryId
