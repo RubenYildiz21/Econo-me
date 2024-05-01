@@ -1,12 +1,18 @@
 package be.helmo.projetmobile.view
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
+import be.helmo.placereport.view.getScaledBitmap
+import be.helmo.projetmobile.databinding.ListItemAccountBinding
 import be.helmo.projetmobile.databinding.ListItemTransactionBinding
 import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
+import java.io.File
 
 class TransactionListAdapter(
     val transaction: List<Transaction>,
@@ -41,7 +47,18 @@ class TransactionListAdapter(
     inner class TransactionHolder(val binding: ListItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(transaction: Transaction, onEditClicked: (transactionId: Int) -> Unit, onDeleteClicked: (transactionId: Int) -> Unit) {
             binding.transactionName.text = transaction.nom
+            binding.transactionPrice.text = "${transaction.solde}"
+            binding.categoryName.text = transaction.categoryId.toString()
+            if (transaction.facture != "") {
+                updatePhoto(binding.showFacture, transaction.facture)
+            }
+            binding.compteName.text = transaction.compteId.toString()
             binding.transactionPrice.text = String.format("%.2f", transaction.solde)
+            if (transaction.type) {
+                binding.transactionPrice.setTextColor(Color.GREEN)
+            } else {
+                binding.transactionPrice.setTextColor(Color.RED)
+            }
             binding.categoryName.text = getCategoryNameById(transaction.categoryId)
             binding.compteName.text = getAccountNameById(transaction.compteId)
             binding.transactionCurrency.text = transaction.devise
@@ -50,6 +67,16 @@ class TransactionListAdapter(
             }
             binding.deleteAccount.setOnClickListener{
                 onDeleteClicked(transaction.id)
+            }
+        }
+
+        private fun updatePhoto(facturePhoto: ImageView, photoFileName: String) {
+            val photoFile = File(facturePhoto.context.applicationContext.filesDir, photoFileName)
+            if (photoFile.exists()) {
+                facturePhoto.doOnLayout {
+                    val photo = getScaledBitmap(photoFile.path, it.width, it.height)
+                    facturePhoto.setImageBitmap(photo)
+                }
             }
         }
     }

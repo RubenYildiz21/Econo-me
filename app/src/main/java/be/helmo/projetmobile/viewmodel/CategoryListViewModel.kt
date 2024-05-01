@@ -8,6 +8,7 @@ import be.helmo.projetmobile.model.Compte
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -55,6 +56,18 @@ class CategoryListViewModel : ViewModel() {
         viewModelScope.launch {
             categoryRepository.getCategories().collect { listOfComptes ->
                 _categories.value = listOfComptes
+            }
+        }
+    }
+
+    fun updateCategoryAfterDelete(solde: Double, id: Int) {
+        viewModelScope.launch {
+            val c = categories.first()
+            val cat = c.firstOrNull() {it.id == id}
+            if (cat != null) {
+                cat.solde -= solde
+                categoryRepository.updateCategory(cat)
+                loadCats()
             }
         }
     }

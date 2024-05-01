@@ -1,33 +1,45 @@
 package be.helmo.projetmobile
 
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.FileProvider
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
+import be.helmo.placereport.view.getScaledBitmap
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
-import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
+import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
-import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Calendar
 import java.util.Date
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
+import be.helmo.projetmobile.model.Compte
 
 class TransactionDialogFragment: BottomSheetDialogFragment() {
     private lateinit var confirmButton: Button
@@ -47,16 +59,21 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
     private val accountListViewModel: AccountListViewModel by viewModels()
 
     private lateinit var binding: FragmentTransactionAddBinding
-
     private var mode: Mode = Mode.CREATE
+    private lateinit var takePicture: ActivityResultLauncher<Uri>
+    private lateinit var photoFileName: String
+    private var onPhotoComplete: (() -> Unit)? = null
 
     private var accounts: List<Compte> = listOf()
 
     companion object {
-        fun newInstance(transaction: Transaction?, mode: Mode): TransactionDialogFragment {
+        fun newInstance(transaction: Transaction?, mode: Mode, takePictureLauncher: ActivityResultLauncher<Uri>?): TransactionDialogFragment {
             val fragment = TransactionDialogFragment()
             fragment.transaction = transaction
             fragment.mode = mode
+            if (takePictureLauncher != null) {
+                fragment.takePicture = takePictureLauncher
+            }
             return fragment
         }
     }
@@ -66,6 +83,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTransactionAddBinding.inflate(inflater, container, false)
+        photoFileName = ""
         return binding.root
     }
 
@@ -77,17 +95,45 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         loadAccounts()
         updateTransactionType()
 
-        confirmButton.setOnClickListener {
+        if (transaction?.facture != null) {
+            photoFileName = transaction?.facture.toString()
+        } else {
+            val tokenLength = 10 // Longueur du token
+            photoFileName = generateRandomToken(tokenLength)
+        }
+        val facturePhoto = binding.facturePhoto
+        facturePhoto.setOnClickListener {
+            val photoFile = File(requireContext().applicationContext.filesDir, photoFileName)
+            val photoUri = FileProvider.getUriForFile(requireContext(), "be.helmo.projetmobile.fileprovider", photoFile)
+            takePicture.launch(photoUri)
+        }
+
+        binding.AddTransaction.setOnClickListener {
             submitData()
+        }
+
+        viewModel.onTransactionComplete = {
+            dismiss()
         }
     }
 
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
-            accountListViewModel.accounts.collect { loadedAccounts ->
-                accounts = loadedAccounts
-                val accountNames = loadedAccounts.map { "${it.nom} (${it.devise})" }
-                updateAccountDropdown(accountNames)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                accountListViewModel.account.collect { account ->
+                    accounts = account
+                    if (account.isNotEmpty()) {
+                        val name = account.map { "${it.nom} (${it.devise})"}
+                        updateAccountDropdown(name)
+                        transaction?.let { transaction ->
+                            val accountId = transaction.compteId
+                            val position = account.indexOfFirst { it.id == accountId }
+                            if (position != -1) {
+                                binding.accountSpinner.setSelection(position)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -103,8 +149,35 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                 categoryListViewModel.categories.collect { categories ->
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
+                    transaction?.let { transaction ->
+                        val categoryId = transaction.categoryId
+                        val position = categories.indexOfFirst { it.id == categoryId }
+                        if (position != -1) {
+                            binding.categorySpinner.setSelection(position)
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun updateCategoriesDropdown(name: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, name)
+        binding.categorySpinner.setAdapter(adapter)
+    }
+
+    private fun updatePhoto(facturePhoto: ImageButton, photoFileName: String) {
+        val photoFile = File(requireContext().applicationContext.filesDir, "t.jpg")
+        if (photoFile.exists()) {
+            // Construire le nouveau nom de fichier
+            val newPhotoFile = File(photoFile.parentFile, photoFileName)
+
+            // Renommer le fichier
+            photoFile.renameTo(newPhotoFile)
+
+            onPhotoComplete?.invoke()
+        } else {
+            facturePhoto.setImageResource(R.drawable.camera_solid)
         }
     }
 
@@ -125,12 +198,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
-
-    private fun updateCategoriesDropdown(name: List<String>) {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, name)
-        binding.categorySpinner.setAdapter(adapter)
-    }
-
     private fun setupViews(view: View) {
         confirmButton = view.findViewById(R.id.AddTransaction)
         nameEditText = view.findViewById(R.id.transactionName)
@@ -143,7 +210,21 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
         // Charger les données existantes si en mode 'Modifier'
         transaction?.let {
+            onPhotoComplete = null
+            viewModel.onTransactionComplete = null
             nameEditText.setText(it.nom)
+            binding.transactionPrice.setText(it.solde.toString())
+
+            // Extraction de l'année, du mois et du jour de la date de la transaction
+            val calendar = Calendar.getInstance()
+            calendar.time = transaction?.date ?: Date()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // Mise à jour du DatePicker avec la date de la transaction
+            binding.datePicker.init(year, month, day, null)
+
         }
     }
 
@@ -156,7 +237,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
 
         val typetransaction = binding.typeSpinner.text.toString()
-        if (typetransaction == ""){
+        if (typetransaction == "") {
             Toast.makeText(context, "Veuillez choisir un type pour la transaction.", Toast.LENGTH_LONG).show()
             return
         }
@@ -166,7 +247,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             Toast.makeText(context, "Veuillez selctionner une categorie.", Toast.LENGTH_LONG).show()
             return
         }
-
         val compte = binding.accountSpinner.text.toString().split(" (")[0]
         if (compte == "") {
             Toast.makeText(context, "Veuillez selctionner un compte.", Toast.LENGTH_LONG).show()
@@ -174,13 +254,10 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
         val date = getDate()
         val montantString = binding.transactionPrice.text.toString()
-        if (typetransaction.equals("Dépense")){
-            if (montantString == "") {
-                Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
-                return
-            }
+        if (montantString == "") {
+            Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
+            return
         }
-
         val montant: Double = montantString.toDoubleOrNull() ?: 0.0
 
         var type = true
@@ -192,12 +269,10 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         val selectedAccount = accounts.find { it.nom == compte }
         val currency = selectedAccount?.devise.toString()
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", "", type, currency)
-        //transactionViewModel.saveOrUpdateTransaction(updatedTransaction)
-        viewModel.createTransaction(compte, category, montant, updatedTransaction)
-        viewModel.onTransactionComplete = {
-            dismiss()
-        }
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", currency, photoFileName, type)
+        updatePhoto(binding.facturePhoto, photoFileName)
+        viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
@@ -220,4 +295,12 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         return calendar.time
     }
+
+    fun generateRandomToken(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9') // Caractères autorisés pour le token
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
+
 }

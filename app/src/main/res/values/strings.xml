@@ -86,6 +86,7 @@
         <item>Octobre</item>
         <item>Novembre</item>
         <item>Décembre</item>
+        <item>All</item>
     </string-array>
 
     <string-array name="transaction_type">

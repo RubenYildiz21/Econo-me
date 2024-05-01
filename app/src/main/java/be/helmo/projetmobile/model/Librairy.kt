@@ -19,14 +19,14 @@ data class Compte(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val nom: String,
     val devise: String,
-    val solde: Double
+    var solde: Double
 )
 
 @Entity
 data class Category(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val nom: String,
-    val solde: Double
+    var nom: String,
+    var solde: Double
 ) {
 }
 
@@ -111,8 +111,8 @@ data class Transaction(
     val date: Date,
     val solde: Double,
     val lieu: String,
-    val facture: String,
-    val type: Boolean,
-    val devise: String
+    val devise: String,
+    var facture: String,
+    val type: Boolean
 ) {}
 

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,10 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.helmo.projetmobile.Mode
-import be.helmo.projetmobile.R
 import be.helmo.projetmobile.TransactionDialogFragment
 import be.helmo.projetmobile.database.TransactionRepository
-import be.helmo.projetmobile.databinding.FragmentTransactionBinding
 import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
@@ -34,6 +33,13 @@ class TransactionListFragment: Fragment() {
             ViewModelProvider(requireActivity()).get(AccountListViewModel::class.java),
             ViewModelProvider(requireActivity()).get(CategoryListViewModel::class.java)
         )
+    }
+    private val accountViewModel: AccountListViewModel by viewModels()
+    private val categoryViewModel: CategoryListViewModel by viewModels()
+    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+
+        }
     }
 
     private lateinit var binding: FragmentTransactionListBinding
@@ -89,7 +95,7 @@ class TransactionListFragment: Fragment() {
     private fun showEditAccountDialog(id: Int) {
         val transac = viewModel.transaction.value.find { it.id == id }
         if (transac != null) {
-            val editDialog = TransactionDialogFragment.newInstance(transac, Mode.EDIT) // passer le compte à modifier
+            val editDialog = TransactionDialogFragment.newInstance(transac, Mode.EDIT, takePictureLauncher) // passer le compte à modifier
             editDialog.show(childFragmentManager, "EditAccount")
         }
     }
@@ -102,6 +108,9 @@ class TransactionListFragment: Fragment() {
                 .setMessage("Etes-vous sur de vouloir supprimer cette transaction : ${trans.nom}?")
                 .setPositiveButton("Supprimer") { dialog, which ->
                     viewModel.deleteTransaction(trans)
+                    categoryViewModel.updateCategoryAfterDelete(trans.solde, trans.categoryId)
+                    accountViewModel.updateAccountAfterDelete(trans.solde, trans.compteId, trans.type)
+                    setupTransactionList()
                     dialog.dismiss()
                 }
                 .setNegativeButton("Annuler") { dialog, which ->
