@@ -52,7 +52,8 @@ data class Transfere(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val source: Int,
     val destination: Int,
-    val montant: Double
+    val montant: Double,
+    val date: Date
 )
 
 @Entity(
@@ -115,10 +116,3 @@ data class Transaction(
     val devise: String
 ) {}
 
-data class CurrencyResponse(
-    val success: Boolean,
-    val timestamp: Long,
-    val base: String,
-    val date: String,
-    val rates: Map<String, Double>
-)

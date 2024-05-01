@@ -24,10 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        /**val headerLayout = LayoutInflater.from(this).inflate(R.layout.fragment_header, null)
-        supportActionBar?.setDisplayShowCustomEnabled(true)
-        supportActionBar?.customView = headerLayout
-        supportActionBar?.setDisplayShowTitleEnabled(false)*/
 
 
         bottomNav = binding.bottomNav

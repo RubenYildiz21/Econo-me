@@ -6,6 +6,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.Date
 import java.util.UUID
 
 class TransfereRepository (val database: ProjectDatabase, private val coroutineScope: CoroutineScope = GlobalScope) {
@@ -51,7 +53,7 @@ class TransfereRepository (val database: ProjectDatabase, private val coroutineS
         coroutineScope.launch {
             database.compteDao().updateCompte(updatedSourceAccount)
             database.compteDao().updateCompte(updatedDestinationAccount)
-            val transfere = Transfere(0, source = sourceAccountId, destination = destinationAccountId, montant = convertedAmount)
+            val transfere = Transfere(0, source = sourceAccountId, destination = destinationAccountId, montant = convertedAmount, Date())
             database.transferDao().addTransfere(transfere)
             Log.d("TransferSuccess", "Transfer from ${sourceAccount.nom} to ${destinationAccount.nom} completed: $amount ${sourceAccount.devise} converted to $convertedAmount ${destinationAccount.devise} at rate $exchangeRate")
         }

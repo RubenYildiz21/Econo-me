@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.time.Month
 import java.util.UUID
 
 class CategoryRepository private constructor(val database: ProjectDatabase, private val coroutineScope: CoroutineScope = GlobalScope) {
@@ -13,7 +14,12 @@ class CategoryRepository private constructor(val database: ProjectDatabase, priv
 
     suspend fun getCategory(categoryId: Int): Category = database.categoryDao().getCategory(categoryId)
 
+    fun getCategoriesByMonth(month: String): Flow<List<Category>> = database.categoryDao().getCategoriesByMonth(month)
+
+    fun getCategoriesByYear(year: String): Flow<List<Category>> = database.categoryDao().getCategoriesByYear(year)
+
     suspend fun addCategory(category: Category) = database.categoryDao().addCategory(category)
+
 
     fun updateCategory(category: Category) {
         coroutineScope.launch {
