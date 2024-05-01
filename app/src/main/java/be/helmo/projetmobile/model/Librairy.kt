@@ -114,5 +114,5 @@ data class Transaction(
     val facture: String,
     val type: Boolean,
     val devise: String
-) {}
+)
 

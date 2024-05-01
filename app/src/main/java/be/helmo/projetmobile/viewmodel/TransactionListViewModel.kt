@@ -29,8 +29,6 @@ class TransactionListViewModel(
     private val categoryViewModel: CategoryListViewModel
 ) : ViewModel() {
 
-    //private val transactionRepository: TransactionRepository = TransactionRepository.get()
-
     private val _transaction: MutableStateFlow<List<Transaction>> = MutableStateFlow(emptyList())
     val transaction : StateFlow<List<Transaction>>
         get() = _transaction.asStateFlow()
@@ -48,11 +46,6 @@ class TransactionListViewModel(
     }
 
     fun loadTransactionsByMonth(month: Int) {
-        /**viewModelScope.launch {
-            transactionRepository.getTransactionsByMonth(month).collect { listOfTransac ->
-                _transaction.value = listOfTransac
-            }
-        }*/
         val filteredTransactions = _transaction.value.filter { transaction ->
             val cal = Calendar.getInstance()
             cal.time = transaction.date
