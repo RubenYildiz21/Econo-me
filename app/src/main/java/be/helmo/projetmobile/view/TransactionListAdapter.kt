@@ -2,11 +2,16 @@ package be.helmo.projetmobile.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
+import be.helmo.placereport.view.getScaledBitmap
 import be.helmo.projetmobile.databinding.ListItemAccountBinding
 import be.helmo.projetmobile.databinding.ListItemTransactionBinding
+import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
+import java.io.File
 
 class TransactionListAdapter(
     val transaction: List<Transaction>,

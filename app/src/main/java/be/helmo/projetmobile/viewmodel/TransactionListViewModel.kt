@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.viewmodel
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
@@ -27,8 +28,6 @@ class TransactionListViewModel(
     private val accountViewModel: AccountListViewModel,
     private val categoryViewModel: CategoryListViewModel
 ) : ViewModel() {
-
-    //private val transactionRepository: TransactionRepository = TransactionRepository.get()
 
     private val _transaction: MutableStateFlow<List<Transaction>> = MutableStateFlow(emptyList())
     val transaction : StateFlow<List<Transaction>>
@@ -77,13 +76,6 @@ class TransactionListViewModel(
         }
     }
 
-    fun getLastTransac() {
-        viewModelScope.launch {
-            val transactions = transaction.first()
-            transac = transactions.lastOrNull()
-        }
-    }
-
 
     var errorMessage = MutableLiveData<String>()
     var onTransactionComplete: (() -> Unit)? = null
@@ -96,7 +88,6 @@ class TransactionListViewModel(
             val category = categoryViewModel.categories.first()
             val cat = category.firstOrNull { it.nom == categoryName }
 
-            val currency = acc?.devise.toString()
             if (acc != null) {
                 Log.d("TransactionListViewModel", "Type de transaction : ${transaction.type}")
                 if (!transaction.type){
@@ -107,13 +98,9 @@ class TransactionListViewModel(
                 }
             }
 
-            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", transaction.facture, transaction.type)
+            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", transaction.devise, transaction.facture, transaction.type)
         }.join()
         return newTransaction
-            val transaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", "", transaction.type, currency)
-            transactionRepository.addTransaction(transaction)
-            onTransactionComplete?.invoke()
-        }
     }
 
     fun deleteTransaction(transaction: Transaction) {

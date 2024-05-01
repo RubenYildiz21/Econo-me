@@ -111,9 +111,7 @@ data class Transaction(
     val date: Date,
     val solde: Double,
     val lieu: String,
-    val facture: String,
-    val type: Boolean,
-    val devise: String
+    val devise: String,
     var facture: String,
     val type: Boolean
 ) {}

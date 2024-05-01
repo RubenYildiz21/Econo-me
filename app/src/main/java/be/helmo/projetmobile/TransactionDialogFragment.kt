@@ -1,5 +1,6 @@
 package be.helmo.projetmobile
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,24 +8,38 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.FileProvider
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
+import be.helmo.placereport.view.getScaledBitmap
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
 import be.helmo.projetmobile.model.Transaction
+import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Calendar
 import java.util.Date
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
+import be.helmo.projetmobile.model.Compte
 
 class TransactionDialogFragment: BottomSheetDialogFragment() {
     private lateinit var confirmButton: Button
@@ -78,7 +93,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         loadCategories()
         loadAccounts()
-        //loadPhotoFileName()
         updateTransactionType()
 
         if (transaction?.facture != null) {
@@ -105,10 +119,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
-            accountListViewModel.accounts.collect { loadedAccounts ->
-                accounts = loadedAccounts
-                val accountNames = loadedAccounts.map { "${it.nom} (${it.devise})" }
-                updateAccountDropdown(accountNames)
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountListViewModel.account.collect { account ->
                     if (account.isNotEmpty()) {
@@ -150,24 +160,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
-    private fun updateTransactionType() {
-        // Chargez les types de transactions à partir des ressources.
-        val transactionTypes = resources.getStringArray(R.array.transaction_type)
-
-        // Créer un ArrayAdapter utilisant un layout simple pour le dropdown.
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypes)
-
-        // Assurez-vous que votre layout a un AutoCompleteTextView ou Spinner avec l'ID approprié.
-        binding.typeSpinner.setAdapter(adapter)
-
-        // Si vous gérez les types de transactions pour les éditer, vous pouvez définir le type actuel ici.
-        transaction?.let {
-            val typeIndex = transactionTypes.indexOf(if (it.type) "Revenu" else "Dépense")
-            binding.typeSpinner.setText(transactionTypes[typeIndex], false)
-        }
-    }
-
-
     private fun updateCategoriesDropdown(name: List<String>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, name)
         binding.categorySpinner.setAdapter(adapter)
@@ -184,11 +176,28 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
             onPhotoComplete?.invoke()
             /**facturePhoto.doOnLayout {
-                val photo = getScaledBitmap(newPhotoFile.path, it.width, it.height)
-                facturePhoto.setImageBitmap(photo)
+            val photo = getScaledBitmap(newPhotoFile.path, it.width, it.height)
+            facturePhoto.setImageBitmap(photo)
             }*/
         } else {
             facturePhoto.setImageResource(R.drawable.camera_solid)
+        }
+    }
+
+    private fun updateTransactionType() {
+        // Chargez les types de transactions à partir des ressources.
+        val transactionTypes = resources.getStringArray(R.array.transaction_type)
+
+        // Créer un ArrayAdapter utilisant un layout simple pour le dropdown.
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypes)
+
+        // Assurez-vous que votre layout a un AutoCompleteTextView ou Spinner avec l'ID approprié.
+        binding.typeSpinner.setAdapter(adapter)
+
+        // Si vous gérez les types de transactions pour les éditer, vous pouvez définir le type actuel ici.
+        transaction?.let {
+            val typeIndex = transactionTypes.indexOf(if (it.type) "Revenu" else "Dépense")
+            binding.typeSpinner.setText(transactionTypes[typeIndex], false)
         }
     }
 
@@ -231,7 +240,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
 
         val typetransaction = binding.typeSpinner.text.toString()
-        if (typetransaction == ""){
+        if (typetransaction == "") {
             Toast.makeText(context, "Veuillez choisir un type pour la transaction.", Toast.LENGTH_LONG).show()
             return
         }
@@ -248,13 +257,10 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
         val date = getDate()
         val montantString = binding.transactionPrice.text.toString()
-        if (typetransaction.equals("Dépense")){
-            if (montantString == "") {
-                Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
-                return
-            }
+        if (montantString == "") {
+            Toast.makeText(context, "Veuillez entrer un montant valide.", Toast.LENGTH_LONG).show()
+            return
         }
-
         val montant: Double = montantString.toDoubleOrNull() ?: 0.0
 
         var type = true
@@ -264,18 +270,12 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             type = true
         }
 
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", photoFileName, type)
+        val selectedAccount = accounts.find { it.nom == compte }
+        val currency = selectedAccount?.devise.toString()
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", currency, photoFileName, type)
         updatePhoto(binding.facturePhoto, photoFileName)
         viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
 
-        val selectedAccount = accounts.find { it.nom == compte }
-        val currency = selectedAccount?.devise.toString()
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", "", type, currency)
-        //transactionViewModel.saveOrUpdateTransaction(updatedTransaction)
-        viewModel.createTransaction(compte, category, montant, updatedTransaction)
-        viewModel.onTransactionComplete = {
-            dismiss()
-        }
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
