@@ -21,4 +21,13 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel() {
             userRepository.addUser(newUser)
         }
     }
+
+    fun updateUser(nom: String, prenom: String) {
+        viewModelScope.launch {
+            val currentUser = userLiveData.value ?: User(id = 0, nom = "", prenom = "")
+            val updatedUser = currentUser.copy(nom = nom, prenom = prenom)
+            userRepository.updateUser(updatedUser)
+        }
+    }
+
 }

@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.constraintlayout.motion.utils.Easing
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import be.helmo.projetmobile.database.CategoryRepository
 import be.helmo.projetmobile.database.TransactionRepository
@@ -41,8 +43,26 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
+        val headerButton: ImageButton = view.findViewById(R.id.headerButton)
+        headerButton.setOnClickListener{
+            setupHeaderButton()
+        }
     }
 
+    private fun setupHeaderButton() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun navigateToUserProfile() {
+        // Assurez-vous que ce fragment existe et est correctement configuré
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
+    }
     private fun setupObserver() {
         viewModel.revenueData.observe(viewLifecycleOwner) { data ->
             if (data.isNotEmpty()) {

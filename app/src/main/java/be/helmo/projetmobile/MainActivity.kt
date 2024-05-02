@@ -2,10 +2,12 @@ package be.helmo.projetmobile
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import be.helmo.projetmobile.database.UserRepository
 import be.helmo.projetmobile.databinding.ActivityMainBinding
 import be.helmo.projetmobile.view.AccountFragment
@@ -56,21 +58,17 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(StatistiqueFragment(), true)
                     true
                 }
-
                 else -> {true}
             }
+
         }
     }
 
     fun loadFragment(fragment: Fragment, showBottomNav: Boolean) {
-        if (showBottomNav) {
-            bottomNav.visibility = View.VISIBLE
-        } else {
-            bottomNav.visibility = View.GONE
-        }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayoutContainer, fragment)
         transaction.commit()
+        bottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
     }
 
     private fun observeUserExistence() {

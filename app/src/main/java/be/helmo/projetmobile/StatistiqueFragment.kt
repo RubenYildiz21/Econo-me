@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.viewModels
 import be.helmo.projetmobile.database.CategoryRepository
 import be.helmo.projetmobile.databinding.FragmentStatistiqueBinding
@@ -39,6 +40,10 @@ class StatistiqueFragment : HeaderFragment(R.layout.fragment_statistique) {
         setupObservers()
         binding.thisMonth.text = LocalDate.now().month.toString()
         binding.thisYear.text = LocalDate.now().year.toString()
+        val headerButton: ImageButton = view.findViewById(be.helmo.projetmobile.R.id.headerButton)
+        headerButton.setOnClickListener{
+            setupHeaderButton()
+        }
     }
 
     private fun setupObservers() {
@@ -86,6 +91,12 @@ class StatistiqueFragment : HeaderFragment(R.layout.fragment_statistique) {
         }
     }
 
+    private fun setupHeaderButton() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
