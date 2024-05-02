@@ -2,7 +2,48 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="AccountFunctionnalTests">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Ruben\.android\avd\Pixel_8_Pro_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-02T17:31:02.833500500Z" />
+        </State>
+      </entry>
+      <entry key="UserInteractionTests">
+        <State />
+      </entry>
+      <entry key="addUser_whenDetailsAreCorrect_navigatesToHome()">
+        <State />
+      </entry>
       <entry key="app">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Ruben\.android\avd\Pixel_8_Pro_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-02T17:17:56.799291900Z" />
+        </State>
+      </entry>
+      <entry key="testAddCompte()">
+        <State />
+      </entry>
+      <entry key="updateUserProfile_updatesDataCorrectly_andShowsConfirmation()">
         <State />
       </entry>
     </value>

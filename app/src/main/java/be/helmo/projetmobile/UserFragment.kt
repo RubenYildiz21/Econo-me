@@ -44,8 +44,9 @@ class UserFragment : HeaderFragment(R.layout.fragment_profile) {
             val prenom = binding.userLastname.text.toString()
             if (validateInputs(nom, prenom)) { // Validez vos entrées ici
                 viewModel.updateUser(nom, prenom)
+                Toast.makeText(context, "Profil mis a jour avec succes", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Invalid input", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Champs incorrects", Toast.LENGTH_SHORT).show()
             }
         }
     }

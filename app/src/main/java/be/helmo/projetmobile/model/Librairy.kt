@@ -18,7 +18,7 @@ data class User(
 @Entity
 data class Compte(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val nom: String,
+    var nom: String,
     val devise: String,
     var solde: Double
 )
