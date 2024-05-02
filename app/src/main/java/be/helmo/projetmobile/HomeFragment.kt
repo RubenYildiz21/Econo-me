@@ -72,6 +72,15 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
                 Log.d("HomeFragment", "No expense data available")
             }
         }
+
+        viewModel.revenueSum.observe(viewLifecycleOwner){sum->
+            Log.d("HomeFragment", "somme revenu : $sum")
+            binding?.amountRevenus?.text = String.format("%.2f€", sum)
+        }
+        viewModel.expenseSum.observe(viewLifecycleOwner){sum->
+            Log.d("HomeFragment", "somme depenses : $sum")
+            binding?.amountDepenses?.text = String.format("%.2f€", sum)
+        }
     }
 
     private fun setupPieChart(pieChart: PieChart, data: List<Category>, label: String) {

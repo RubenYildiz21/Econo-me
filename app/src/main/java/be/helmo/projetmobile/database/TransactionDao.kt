@@ -28,6 +28,6 @@ interface TransactionDao {
     @Delete
     suspend fun deleteTransaction(transaction: Transaction)
 
-    @Query("SELECT * FROM 'TRANSACTION' WHERE strftime('%m', date) = :month")
+    @Query("SELECT * FROM 'TRANSACTION' WHERE strftime('%m', datetime(date / 1000, 'unixepoch')) = :month")
     fun getTransactionsByMonth(month: String): Flow<List<Transaction>>
 }
