@@ -20,6 +20,7 @@ class CategoryRepository private constructor(val database: ProjectDatabase, priv
 
     fun getTransactionType(transactionType: Boolean): Flow<List<Category>> = database.categoryDao().getTypeTransactions(transactionType)
 
+
     suspend fun addCategory(category: Category) = database.categoryDao().addCategory(category)
 
 

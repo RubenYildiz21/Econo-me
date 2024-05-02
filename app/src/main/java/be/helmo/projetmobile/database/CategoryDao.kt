@@ -26,6 +26,7 @@ interface CategoryDao {
     @Query("Select * from Category where Category.id in (select tr.categoryId from 'Transaction' tr where tr.type = :transactionType)")
     fun getTypeTransactions(transactionType: Boolean): Flow<List<Category>>
 
+
     @Query("SELECT * FROM Category WHERE id IN (SELECT categoryId FROM `Transaction` WHERE strftime('%Y', datetime(date / 1000, 'unixepoch')) = :year)")
     fun getCategoriesByYear(year: String): Flow<List<Category>>
 
