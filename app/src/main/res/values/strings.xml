@@ -71,6 +71,7 @@
     <string name="myProfile">Mon profil</string>
     <string name="user_update">Modifer</string>
     <string name="gotoprofile">GoToProfile</string>
+    <string name="retour">Retour</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>
