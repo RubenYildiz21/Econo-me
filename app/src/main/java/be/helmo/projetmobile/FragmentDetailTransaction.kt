@@ -126,8 +126,8 @@ class FragmentDetailTransaction : DialogFragment(),
         if (photoFileName != "") {
             val photoFile = File(requireContext().applicationContext.filesDir, photoFileName)
             if (photoFile.exists()) {
-                facturePhoto.doOnLayout {
-                    val photo = getScaledBitmap(photoFile.path, it.width, it.height)
+                facturePhoto.post {
+                    val photo = getScaledBitmap(photoFile.path, facturePhoto.width, facturePhoto.height)
                     facturePhoto.setImageBitmap(photo)
                 }
             } else {

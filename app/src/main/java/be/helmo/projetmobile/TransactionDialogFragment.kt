@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
+import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
@@ -51,6 +52,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
     private val categoryListViewModel: CategoryListViewModel by viewModels()
     private val accountListViewModel: AccountListViewModel by viewModels()
+    private var category: List<Category> = listOf()
 
     private lateinit var binding: FragmentTransactionAddBinding
     private var mode: Mode = Mode.CREATE
@@ -111,14 +113,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
-    private fun showMapFragment() {
-        val mapFragment = MapFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, mapFragment)
-            .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
-            .commit()
-    }
-
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -127,13 +121,11 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
-                        /**transaction?.let { transaction ->
+                        transaction?.let { transaction ->
                             val accountId = transaction.compteId
-                            val position = account.indexOfFirst { it.id == accountId }
-                            if (position != -1) {
-                                binding.accountSpinner.setSelection(position)
-                            }
-                        }*/
+                            val nameAccount = account.firstOrNull() { it.id == accountId }?.nom
+                            binding.accountSpinner.setText(nameAccount, false)
+                        }
                     }
                 }
             }
@@ -149,15 +141,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 categoryListViewModel.categories.collect { categories ->
+                    category = categories
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
-                    /**transaction?.let { transaction ->
+                    transaction?.let { transaction ->
                         val categoryId = transaction.categoryId
-                        val position = categories.indexOfFirst { it.id == categoryId }
-                        if (position != -1) {
-                            binding.categorySpinner.setSelection(position)
-                        }
-                    }*/
+                        val nameCat = categories.firstOrNull { it.id == categoryId }?.nom
+                        binding.categorySpinner.setText(nameCat, false)
+                    }
                 }
             }
         }
@@ -217,6 +208,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             nameEditText.setText(it.nom)
             binding.transactionPrice.setText(it.solde.toString())
 
+            /**if (transaction != null) {
+                val nameCat = category.firstOrNull { it.id == transaction!!.categoryId }?.nom
+                binding.categorySpinner.setText(nameCat, false)
+
+                val nameCompte = accounts.firstOrNull { it.id == transaction!!.compteId }?.nom
+                binding.accountSpinner.setText(nameCompte, false)
+            }*/
+
             // Extraction de l'année, du mois et du jour de la date de la transaction
             val calendar = Calendar.getInstance()
             calendar.time = transaction?.date ?: Date()
@@ -268,10 +267,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         } else {
             type = true
         }
+        var pos: LatLng = LatLng(0.0, 0.0)
+        if (transaction?.lieu != null) {
+            pos = transaction!!.lieu
+        }
 
         val selectedAccount = accounts.find { it.nom == compte }
         val currency = selectedAccount?.devise.toString()
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, LatLng(0.0, 0.0), currency, photoFileName, type)
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, pos, currency, photoFileName, type)
         updatePhoto(binding.facturePhoto, photoFileName)
         viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
 

@@ -89,7 +89,31 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
         }
     }
 
-    suspend fun updateTransactionsByMonth(selectedMonth: Int) {
+    /**private fun setupTransactionList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                combine(
+                    viewModel.transaction,
+                    accountListViewModel.account,
+                    categoryListViewModel.categories
+                ) { transactions, accounts, categories ->
+                    Triple(transactions, accounts, categories)
+                }.collect { (transactions, accounts, categories) ->
+                    binding.transactionRecyclerView.adapter = TransactionListAdapter(
+                        transactions,
+                        accounts,
+                        categories,
+                        ::showEditAccountDialog,
+                        ::deleteAccount,
+                        ::showMapFragment,
+                        ::onTransactionClicked
+                    )
+                }
+            }
+        }
+    }*/
+
+    fun updateTransactionsByMonth(selectedMonth: Int) {
         viewModel.loadTransactionsByMonth(selectedMonth)
         setupTransactionList()
     }

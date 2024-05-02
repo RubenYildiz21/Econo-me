@@ -60,6 +60,8 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
             setupHeaderButton()
         }
 
+        setAmounts()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.amountRevenu.text = viewModel.getAllRevenu().toString()
@@ -85,6 +87,15 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         }
     }
 
+    private fun setAmounts() {
+        viewModel.getAllRevenu()
+        binding.amountRevenu.text = viewModel.totalR.toString()
+        viewModel.getAllDepense()
+        binding.amountDepense.text = viewModel.totalD.toString()
+        binding.amountRevenu.text = "12"
+        binding.amountDepense.text = "12"
+    }
+
     private fun setupMonthDropdown() {
         // Récupérer le tableau de mois depuis les ressources
         val months = resources.getStringArray(R.array.months_array)
@@ -95,18 +106,6 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         // Associer l'adaptateur au AutoCompleteTextView
         binding.month.setAdapter(adapter)
 
-    }
-
-    private fun updatePhoto(facturePhoto: ImageButton, photoFileName: String) {
-        val photoFile = File(requireContext().applicationContext.filesDir, photoFileName)
-        if (photoFile.exists()) {
-            facturePhoto.doOnLayout {
-                val photo = getScaledBitmap(photoFile.path, it.width, it.height)
-                facturePhoto.setImageBitmap(photo)
-            }
-        } else {
-            facturePhoto.setImageResource(R.drawable.camera_solid)
-        }
     }
 
     private fun setupHeaderButton() {
