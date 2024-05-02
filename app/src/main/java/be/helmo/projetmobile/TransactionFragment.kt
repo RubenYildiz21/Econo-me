@@ -55,6 +55,11 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         super.onViewCreated(view, savedInstanceState)
         setupMonthDropdown()
 
+        val headerButton: ImageButton = view.findViewById(be.helmo.projetmobile.R.id.headerButton)
+        headerButton.setOnClickListener{
+            setupHeaderButton()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.amountRevenu.text = viewModel.getAllRevenu().toString()
@@ -102,5 +107,12 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         } else {
             facturePhoto.setImageResource(R.drawable.camera_solid)
         }
+    }
+
+    private fun setupHeaderButton() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
     }
 }

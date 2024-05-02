@@ -66,6 +66,9 @@
     <string name="select_type">Sélectionner le type de transaction</string>
     <string name="amountRevenu">50$</string>
     <string name="amountDepense">100$</string>
+    <string name="myProfile">Mon profil</string>
+    <string name="user_update">Modifer</string>
+    <string name="gotoprofile">GoToProfile</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>
