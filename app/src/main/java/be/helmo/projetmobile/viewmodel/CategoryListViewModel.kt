@@ -27,6 +27,10 @@ class CategoryListViewModel : ViewModel() {
         }
     }
 
+    fun initAccountsForTest(categories: List<Category>) {
+        _categories.value = categories
+    }
+
     suspend fun addCategory(name: String) : Int {
         val category = Category(0, name, 0.0)
         categoryRepository.addCategory(category)
@@ -52,7 +56,7 @@ class CategoryListViewModel : ViewModel() {
         }
     }
 
-    private fun loadCats() {
+    fun loadCats() {
         viewModelScope.launch {
             categoryRepository.getCategories().collect { listOfComptes ->
                 _categories.value = listOfComptes

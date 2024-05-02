@@ -33,7 +33,7 @@ abstract class ProjectDatabase : RoomDatabase() {
         }
 
         fun get(): ProjectDatabase {
-            return INSTANCE ?: throw IllegalStateException("CategoryDatabase must be initialized")
+            return INSTANCE ?: throw IllegalStateException("Database must be initialized")
         }
     }
 }
