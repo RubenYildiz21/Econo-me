@@ -2,112 +2,123 @@ package be.helmo.projetmobile
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.constraintlayout.motion.utils.Easing
+import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
+import be.helmo.projetmobile.database.CategoryRepository
+import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentHomeBinding
-import com.github.mikephil.charting.animation.Easing
+import be.helmo.projetmobile.model.Category
+import be.helmo.projetmobile.viewmodel.CurrencyViewModel
+import be.helmo.projetmobile.viewmodel.HomeViewModel
+import be.helmo.projetmobile.viewmodel.HomeViewModelFactory
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.animation.*
+import com.github.mikephil.charting.components.Legend
 
 
 class HomeFragment : HeaderFragment(R.layout.fragment_home) {
     private var binding: FragmentHomeBinding? = null
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(TransactionRepository.get(), CategoryRepository.get(), CurrencyViewModel())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        setupPieCharts(binding)
-
-        return binding.root
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setupObserver()
+        Log.d("HomeFragment", "Transaction loaded")
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupObserver()
+        val headerButton: ImageButton = view.findViewById(R.id.headerButton)
+        headerButton.setOnClickListener{
+            setupHeaderButton()
+        }
     }
 
-
-    private fun setupPieCharts(binding: FragmentHomeBinding) {
-        setupPieChartRevenus(binding.pieChartRevenus)
-        setupPieChartDepenses(binding.pieChartDepenses)
+    private fun setupHeaderButton() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
-    private fun setupPieChartRevenus(pieChart: PieChart) {
-        val entries = mutableListOf(
-            PieEntry(50f, "Catégorie 1"),
-            PieEntry(30f, "Catégorie 2")
-        )
+    private fun navigateToUserProfile() {
+        // Assurez-vous que ce fragment existe et est correctement configuré
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, UserFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+    private fun setupObserver() {
+        viewModel.revenueData.observe(viewLifecycleOwner) { data ->
+            if (data.isNotEmpty()) {
+                binding?.let { setupPieChart(it.pieChartRevenus, data, "Revenus") }
+            } else {
+                Log.d("HomeFragment", "No revenue data available")
+            }
+        }
 
-        val dataSet = PieDataSet(entries, "Revenus").apply { // Laissez le label vide si vous ne voulez pas de titre sur la légende
+        viewModel.expenseData.observe(viewLifecycleOwner) { data ->
+            if (data.isNotEmpty()) {
+                binding?.let { setupPieChart(it.pieChartDepenses, data, "Dépenses") }
+            } else {
+                Log.d("HomeFragment", "No expense data available")
+            }
+        }
+    }
+
+    private fun setupPieChart(pieChart: PieChart, data: List<Category>, label: String) {
+        val entries = data.map { PieEntry(it.solde.toFloat(), it.nom) }
+        val dataSet = PieDataSet(entries, "").apply {
             setColors(*ColorTemplate.MATERIAL_COLORS)
-            valueFormatter = PercentFormatter(pieChart)
-            setDrawValues(false)
+            valueTextColor = Color.WHITE
+            valueTextSize = 12f
         }
+        Log.d("HomeFragment", "Entries: $entries")
+        Log.d("HomeFragment", "DataSet: $dataSet")
 
-        val pieData = PieData(dataSet).apply {
-            setValueTextSize(12f)
-            setValueTextColor(Color.WHITE)
-        }
+        pieChart.data = PieData(dataSet)
 
         pieChart.apply {
-            data = pieData
-            description.text = ""
+            description.isEnabled = false
             isDrawHoleEnabled = true
             setHoleColor(Color.WHITE)
+            holeRadius = 58f
+            transparentCircleRadius = 61f
+            setEntryLabelTextSize(12f)
             setUsePercentValues(true)
-            setDrawEntryLabels(false) // Ne pas dessiner les labels des tranches
-            legend.isEnabled = true
-            legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-            legend.orientation = Legend.LegendOrientation.VERTICAL
-            legend.setDrawInside(false)
-            animateY(1400, Easing.EaseInOutQuad)
+            setDrawEntryLabels(false) // Do not draw labels on the slices themselves
+
+            // Configure the legend
+            legend.apply {
+                isEnabled = true
+                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                orientation = Legend.LegendOrientation.VERTICAL
+                setDrawInside(false)
+                xEntrySpace = 7f
+                yEntrySpace = 0f
+                yOffset = 5f
+            }
+
+            // Animate the chart
+            animateY(1400, com.github.mikephil.charting.animation.Easing.EaseInOutQuad)
             invalidate()
         }
     }
-
-
-
-    private fun setupPieChartDepenses(pieChart: PieChart) {
-        val entries = mutableListOf(
-            PieEntry(70f, "Catégorie A"),
-            PieEntry(20f, "Catégorie B")
-        )
-
-        val dataSet = PieDataSet(entries, "").apply { // Laissez le label vide si vous ne voulez pas de titre sur la légende
-            setColors(*ColorTemplate.JOYFUL_COLORS)
-            valueFormatter = PercentFormatter(pieChart) // Assurez-vous que les pourcentages sont formatés correctement
-            setDrawValues(false) // Ne pas dessiner les valeurs à l'intérieur des tranches
-        }
-
-        val pieData = PieData(dataSet).apply {
-            setValueTextSize(12f)
-            setValueTextColor(Color.WHITE)
-        }
-
-        pieChart.apply {
-            data = pieData
-            description.text = ""
-            isDrawHoleEnabled = true
-            setHoleColor(Color.WHITE)
-            setUsePercentValues(true)
-            setDrawEntryLabels(false) // Ne pas dessiner les labels des tranches
-            legend.isEnabled = true
-            legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-            legend.orientation = Legend.LegendOrientation.VERTICAL
-            legend.setDrawInside(false)
-            animateY(1400, Easing.EaseInOutQuad)
-            invalidate()
-        }
-    }
-
-
 
 }

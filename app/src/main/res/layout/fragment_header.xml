@@ -17,11 +17,10 @@
             android:id="@+id/headerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:backgroundTint="@color/blueTransparent"
             android:src="@drawable/ic_user"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:contentDescription="@string/gotoprofile" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -88,7 +88,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         loadCategories()
         loadAccounts()
         updateTransactionType()
-        //googleMap()
 
         if (transaction?.facture != null) {
             photoFileName = transaction?.facture.toString()
@@ -102,10 +101,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             val photoUri = FileProvider.getUriForFile(requireContext(), "be.helmo.projetmobile.fileprovider", photoFile)
             takePicture.launch(photoUri)
         }
-
-        /**binding.addMap.setOnClickListener {
-            showMapFragment()
-        }*/
 
         binding.AddTransaction.setOnClickListener {
             submitData()
