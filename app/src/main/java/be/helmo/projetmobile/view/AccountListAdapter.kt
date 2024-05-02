@@ -1,5 +1,6 @@
 package be.helmo.projetmobile.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class AccountListAdapter(
 
 
     inner class AccountHolder(val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(account: Compte, onEditClicked: (accountId: Int) -> Unit, onDeleteClicked: (accountId: Int) -> Unit) {
             binding.textViewAccountName.text = account.nom
             binding.textViewAccountBalance.text = "${account.solde} ${account.devise}"

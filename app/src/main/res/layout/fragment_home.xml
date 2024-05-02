@@ -39,7 +39,8 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/revenu"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:fontFamily="@font/alata"/>
 
                 <TextView
                     android:id="@+id/amountRevenu"
@@ -51,7 +52,8 @@
                     android:layout_marginBottom="5dp"
                     android:text="50€"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:fontFamily="@font/alata"/>
 
             </RelativeLayout>
 
@@ -74,7 +76,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/alata"/>
 
                 <TextView
                     android:id="@+id/amountDepense"
@@ -86,7 +89,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/alata"/>
 
             </RelativeLayout>
         </LinearLayout>

@@ -17,7 +17,6 @@ abstract class HeaderFragment(layoutId: Int) : Fragment(layoutId) {
         super.onViewCreated(view, savedInstanceState)
         headerUsernameTextView = view.findViewById(R.id.header_username) ?: return
         userViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
-            // Mettez à jour l'interface utilisateur ici
             headerUsernameTextView.text = user?.let { "${it.nom} ${it.prenom}" } ?: "Aucun utilisateur"
         }
     }

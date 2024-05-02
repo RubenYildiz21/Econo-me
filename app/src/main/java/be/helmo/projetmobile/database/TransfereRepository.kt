@@ -38,7 +38,6 @@ class TransfereRepository (val database: ProjectDatabase, private val coroutineS
             return
         }
 
-        // Convert the amount only if currencies differ
         val convertedAmount = if (sourceAccount.devise != destinationAccount.devise) {
             amount * exchangeRate
         } else {
@@ -46,7 +45,7 @@ class TransfereRepository (val database: ProjectDatabase, private val coroutineS
         }
 
         Log.d("transfereRepository", "amount : ${amount} --- ConvertedAmount : ${convertedAmount}")
-        // Update balances: subtract the original amount from the source and add the converted amount to the destination
+
         val updatedSourceAccount = sourceAccount.copy(solde = sourceAccount.solde - amount)
         val updatedDestinationAccount = destinationAccount.copy(solde = destinationAccount.solde + convertedAmount)
 

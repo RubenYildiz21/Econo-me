@@ -26,7 +26,6 @@ class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        //supportFragmentManager.beginTransaction().add(R.id.fragment_container, CategoryListFragment()).commit()
         return binding.root
     }
 
@@ -35,7 +34,7 @@ class CategoriesFragment: HeaderFragment(R.layout.fragment_categories) {
         binding.confirm.setOnClickListener {
             val modalBottomSheet = ModalBottomSheet()
             modalBottomSheet.show(childFragmentManager, ModalBottomSheet.TAG)
-            //showCategoryDialog()
+
         }
         val headerButton: ImageButton = view.findViewById(be.helmo.projetmobile.R.id.headerButton)
         headerButton.setOnClickListener{

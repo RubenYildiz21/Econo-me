@@ -62,23 +62,8 @@ class CurrencyViewModel : ViewModel() {
             }
         } catch (e: Exception) {
             Log.e("CurrencyViewModel", "Error fetching exchange rate: ${e.message}")
-            1.0  // Return a default or error code
+            1.0
         }
-    }
-
-    fun getExchangeRates(apiKey: String): Flow<Map<String, Double>> = flow {
-        val response = exchangeService.getLatestRates(apiKey)
-        if (response.isSuccessful && response.body() != null) {
-            emit(response.body()!!.rates)
-            Log.e("CurrencyViewModel", "fetched rates: ${response.body()}")
-        } else {
-            Log.e("CurrencyViewModel", "Failed to fetch rates: ${response.errorBody()?.string()}")
-            throw Exception("Failed to fetch rates")  // Lever une exception en cas d'erreur
-        }
-    }.catch { e ->
-        // Log l'erreur et émet une map vide
-        Log.e("CurrencyViewModel", "Error in fetching currency rates: ${e.message}", e)
-        emit(emptyMap())
     }
 
 

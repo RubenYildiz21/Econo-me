@@ -44,7 +44,7 @@ class TransferViewModel(
                     currencyViewModel.getExchangeRate(sourceCurrencyCode, destinationCurrencyCode)
                 } catch (e: Exception) {
                     Log.e("TransferViewModel", "Error fetching exchange rate: ${e.message}")
-                    1.0  // Fallback rate in case of failure
+                    1.0  // taux par defaut en cas d'erreur
                 }
             } else {
                 1.0

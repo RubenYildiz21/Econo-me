@@ -47,9 +47,6 @@ class CategoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val menuHost: MenuHost = requireActivity()
-        //menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 categoryListViewModel.categories.collect() { categories ->
@@ -83,36 +80,5 @@ class CategoryListFragment : Fragment() {
                 }
                 .show()
         }
-    }
-
-    /**
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.fragment_navbar, menu)
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when(menuItem.itemId) {
-            R.id.new_cat -> {
-                showNewCategory()
-                true
-            }
-            else -> false
-        }
-    }
-    */
-
-    private fun showNewCategory() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            //val id = categoryListViewModel.addCategory("")
-            showCategory(id)
-        }
-    }
-
-    private fun showCategory(id : Int) {
-        /**findNavController().navigate(
-            CategoryListFragmentDirections.showCategory(
-                id
-            )
-        )*/
     }
 }

@@ -92,7 +92,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         if (transaction?.facture != null) {
             photoFileName = transaction?.facture.toString()
         } else {
-            val tokenLength = 10 // Longueur du token
+            val tokenLength = 10
             photoFileName = generateRandomToken(tokenLength)
         }
         val facturePhoto = binding.facturePhoto
@@ -127,13 +127,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
-                        /**transaction?.let { transaction ->
-                            val accountId = transaction.compteId
-                            val position = account.indexOfFirst { it.id == accountId }
-                            if (position != -1) {
-                                binding.accountSpinner.setSelection(position)
-                            }
-                        }*/
                     }
                 }
             }
@@ -151,13 +144,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                 categoryListViewModel.categories.collect { categories ->
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
-                    /**transaction?.let { transaction ->
-                        val categoryId = transaction.categoryId
-                        val position = categories.indexOfFirst { it.id == categoryId }
-                        if (position != -1) {
-                            binding.categorySpinner.setSelection(position)
-                        }
-                    }*/
                 }
             }
         }
@@ -184,16 +170,16 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
     }
 
     private fun updateTransactionType() {
-        // Chargez les types de transactions à partir des ressources.
+
         val transactionTypes = resources.getStringArray(R.array.transaction_type)
 
-        // Créer un ArrayAdapter utilisant un layout simple pour le dropdown.
+
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypes)
 
-        // Assurez-vous que votre layout a un AutoCompleteTextView ou Spinner avec l'ID approprié.
+
         binding.typeSpinner.setAdapter(adapter)
 
-        // Si vous gérez les types de transactions pour les éditer, vous pouvez définir le type actuel ici.
+
         transaction?.let {
             val typeIndex = transactionTypes.indexOf(if (it.type) "Revenu" else "Dépense")
             binding.typeSpinner.setText(transactionTypes[typeIndex], false)

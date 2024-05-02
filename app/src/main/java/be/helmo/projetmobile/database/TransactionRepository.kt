@@ -34,7 +34,7 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
                 CurrencyViewModel.getRate(account.devise)
             } catch (e: Exception) {
                 Log.e("TransferViewModel", "Error fetching exchange rate: ${e.message}")
-                1.0  // Fallback rate in case of failure
+                1.0
             }
         } else {
             1.0

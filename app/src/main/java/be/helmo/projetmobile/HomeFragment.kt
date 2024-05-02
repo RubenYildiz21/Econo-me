@@ -56,13 +56,6 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
             .commit()
     }
 
-    private fun navigateToUserProfile() {
-        // Assurez-vous que ce fragment existe et est correctement configuré
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.frameLayoutContainer, UserFragment())
-            .addToBackStack(null)
-            .commit()
-    }
     private fun setupObserver() {
         viewModel.revenueData.observe(viewLifecycleOwner) { data ->
             if (data.isNotEmpty()) {
@@ -101,9 +94,8 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
             transparentCircleRadius = 61f
             setEntryLabelTextSize(12f)
             setUsePercentValues(true)
-            setDrawEntryLabels(false) // Do not draw labels on the slices themselves
+            setDrawEntryLabels(false)
 
-            // Configure the legend
             legend.apply {
                 isEnabled = true
                 verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -115,7 +107,6 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
                 yOffset = 5f
             }
 
-            // Animate the chart
             animateY(1400, com.github.mikephil.charting.animation.Easing.EaseInOutQuad)
             invalidate()
         }

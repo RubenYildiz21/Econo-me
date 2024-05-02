@@ -40,10 +40,9 @@ class CategoryListViewModel : ViewModel() {
     fun saveOrUpdateCategory(category: Category) {
         viewModelScope.launch {
             if (category.id > 0) {
-                // L'ID existe, donc c'est une mise à jour
                 categoryRepository.updateCategory(category)
             } else {
-                // Pas d'ID, donc c'est une nouvelle entrée
+
                 categoryRepository.addCategory(category)
             }
         }
@@ -52,7 +51,7 @@ class CategoryListViewModel : ViewModel() {
     fun deleteCat(cat: Category) {
         viewModelScope.launch {
             categoryRepository.deleteCat(cat)
-            loadCats()  // Refresh the list after deletion
+            loadCats()
         }
     }
 

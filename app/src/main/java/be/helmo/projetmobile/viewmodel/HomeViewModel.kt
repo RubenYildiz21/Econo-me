@@ -43,25 +43,4 @@ class HomeViewModel(private val transactionRepository: TransactionRepository, pr
             }
         }
     }
-
-
-    private suspend fun processTransactions(transactions: List<Category>, isRevenue: Boolean) {
-        val categorySums = transactions.groupBy { it.id }.map { entry ->
-            val categoryName = categoryRepository.getCategory(entry.key).nom
-            val sum = entry.value.sumOf { it.solde }
-            Category(entry.key, categoryName, sum)
-        }
-        if (isRevenue) {
-            _revenueData.postValue(categorySums)
-        } else {
-            _expenseData.postValue(categorySums)
-        }
-    }
-
-
-    private suspend fun getCategoryNameById(categoryId: Int): String {
-        Log.d("HomeViewModel", "Fetched category: ${categoryRepository.getCategory(categoryId).nom}")
-        return categoryRepository.getCategory(categoryId).nom
-
-    }
 }
