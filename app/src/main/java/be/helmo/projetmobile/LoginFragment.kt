@@ -46,7 +46,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToMain() {
-        (activity as? MainActivity)?.loadFragment(HomeFragment(), true)
+        //(activity as? MainActivity)?.loadFragment(HomeFragment(), true)
     }
 
     override fun onDestroyView() {

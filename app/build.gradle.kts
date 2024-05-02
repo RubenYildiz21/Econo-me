@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
     id("com.google.devtools.ksp")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -13,6 +14,7 @@ android {
         applicationId = "be.helmo.projetmobile"
         minSdk = 26
         targetSdk = 34
+        compileSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -41,6 +43,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -70,6 +73,8 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.3.1")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     implementation("io.coil-kt:coil:2.6.0")
     ksp("androidx.room:room-compiler:2.6.1")
 

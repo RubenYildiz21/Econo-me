@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.google.android.gms.maps.model.LatLng
 import java.util.Date
 import java.util.UUID
 
@@ -110,7 +111,7 @@ data class Transaction(
     val compteId: Int,
     val date: Date,
     val solde: Double,
-    val lieu: String,
+    var lieu: LatLng,
     val devise: String,
     var facture: String,
     val type: Boolean

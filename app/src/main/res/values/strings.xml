@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_map_api_key">AIzaSyAx0luzZzrD9_WcbI61etLbMEKfBlpn18A</string>
     <string name="app_name">ProjetMobile</string>
     <string name="home_button">Go To HomePage</string>
     <string name="welcome">Bienvenu !</string>
@@ -64,6 +65,7 @@
     <string name="categoriesPerMonth">Catégories ce mois-ci</string>
     <string name="date">Sélectionner la date</string>
     <string name="select_type">Sélectionner le type de transaction</string>
+    <string name="chercher_location">Entrez une adresse</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>
@@ -93,5 +95,23 @@
         <item>Dépense</item>
         <item>Revenu</item>
     </string-array>
+
+
+    <string name="circle_demo_label">Circle Demo</string>
+    <string name="circle_demo_details">Demonstrate how to add circles to a map</string>
+    <string name="properties_circle">Properties for Circle(s)</string>
+    <string name="pattern_dashed">Dashed</string>
+    <string name="pattern_dotted">Dotted</string>
+    <string name="pattern_mixed">Mixed</string>
+    <string name="pattern_solid">Solid</string>
+    <string name="fill_alpha">Fill Alpha</string>
+    <string name="fill_hue">Fill Hue</string>
+    <string name="stroke_alpha">Stroke Alpha</string>
+    <string name="stroke_hue">Stroke Hue</string>
+    <string name="stroke_joint_type">Stroke Joint Type</string>
+    <string name="stroke_pattern">Stroke Pattern</string>
+    <string name="stroke_width">Stroke Width</string>
+    <string name="clickable">Clickable</string>
+    <string name="retour">Retour</string>
 
 </resources>

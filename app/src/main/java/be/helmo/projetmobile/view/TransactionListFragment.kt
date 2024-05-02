@@ -14,19 +14,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import be.helmo.projetmobile.FragmentDetailTransaction
+import be.helmo.projetmobile.MapFragment
 import be.helmo.projetmobile.Mode
+import be.helmo.projetmobile.R
 import be.helmo.projetmobile.TransactionDialogFragment
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
-import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionViewModelFactory
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class TransactionListFragment: Fragment() {
+class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener {
     private val viewModel: TransactionListViewModel by viewModels {
         TransactionViewModelFactory(
             TransactionRepository.get(),
@@ -42,6 +46,7 @@ class TransactionListFragment: Fragment() {
         }
     }
 
+    private var transacToUpdate: Int = 0
     private lateinit var binding: FragmentTransactionListBinding
     private val accountListViewModel: AccountListViewModel by viewModels()
     private val categoryListViewModel: CategoryListViewModel by viewModels()
@@ -76,7 +81,9 @@ class TransactionListFragment: Fragment() {
                             accounts,
                             categories,
                             ::showEditAccountDialog,
-                            ::deleteAccount
+                            ::deleteAccount,
+                            ::showMapFragment,
+                            ::onTransactionClicked
                         )
                     } else {
                         Log.d("Debug", "Data missing: Transactions or Accounts or Categories")
@@ -118,5 +125,35 @@ class TransactionListFragment: Fragment() {
                 }
                 .show()
         }
+    }
+
+    private fun showMapFragment(id: Int) {
+        val mapFragment = MapFragment()
+        transacToUpdate = id
+        /**val editPlace = MapFragment()
+        editPlace.show(childFragmentManager, "EditPlace")*/
+
+        mapFragment.setOnLatLngSelectedListener(this)
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, mapFragment)
+            .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
+            .commit()
+
+    }
+
+    fun onTransactionClicked(id: Int) {
+        val tr = viewModel.getTransactioByID(id)
+        val transactionDetail = FragmentDetailTransaction.newInstance(tr)
+        transacToUpdate = id
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutContainer, transactionDetail)
+            .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
+            .commit()
+    }
+
+    override fun onLatLngSelected(latLng: LatLng) {
+        viewModel.updateLieu(transacToUpdate, latLng)
     }
 }

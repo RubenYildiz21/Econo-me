@@ -24,7 +24,6 @@ class AccountFragment : HeaderFragment(be.helmo.projetmobile.R.layout.fragment_c
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -12,6 +12,7 @@ import be.helmo.projetmobile.database.CompteRepository
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.model.Compte
 import be.helmo.projetmobile.model.Transaction
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -56,6 +57,16 @@ class TransactionListViewModel(
         _transaction.value = filteredTransactions
     }
 
+    fun updateLieu(transactionId: Int, pos: LatLng) {
+        viewModelScope.launch {
+            val list =transaction.first()
+            val t = list.firstOrNull {it.id == transactionId}
+            if (t != null) {
+                t.lieu = pos
+                transactionRepository.updateTransaction(t)
+            }
+        }
+    }
 
     fun saveOrUpdateTransaction(compte: String, category: String, montant: Double, transaction: Transaction) {
         viewModelScope.launch {
@@ -98,7 +109,7 @@ class TransactionListViewModel(
                 }
             }
 
-            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, "", transaction.devise, transaction.facture, transaction.type)
+            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, LatLng(0.0, 0.0), transaction.devise, transaction.facture, transaction.type)
         }.join()
         return newTransaction
     }
@@ -146,5 +157,38 @@ class TransactionListViewModel(
             }
         }.join()
         return totalDepense
+    }
+
+    fun getPos(id: Int): LatLng {
+        var pos: LatLng = LatLng(0.0, 0.0)
+        viewModelScope.launch {
+            val list =transaction.first()
+            val t = list.firstOrNull {it.id == id}
+            if (t != null) {
+                pos = t.lieu
+            }
+        }
+        return pos
+    }
+
+    fun getImage(id: Int): String {
+        var nom: String = ""
+        viewModelScope.launch {
+            val list = transaction.first()
+            val t = list.firstOrNull {it.id == id}
+            if (t != null) {
+                nom = t.facture
+            }
+        }
+        return nom
+    }
+
+    fun getTransactioByID(id: Int): Transaction? {
+        var trans: Transaction? = null
+        viewModelScope.launch {
+            val list = transaction.first()
+            trans = list.firstOrNull { it.id == id }
+        }
+        return trans
     }
 }
