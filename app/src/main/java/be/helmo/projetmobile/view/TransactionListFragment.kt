@@ -75,25 +75,21 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
                 ) { transactions, accounts, categories ->
                     Triple(transactions, accounts, categories)
                 }.collect { (transactions, accounts, categories) ->
-                    if (transactions.isNotEmpty() && accounts.isNotEmpty() && categories.isNotEmpty()) {
-                        binding.transactionRecyclerView.adapter = TransactionListAdapter(
-                            transactions,
-                            accounts,
-                            categories,
-                            ::showEditAccountDialog,
-                            ::deleteAccount,
-                            ::showMapFragment,
-                            ::onTransactionClicked
-                        )
-                    } else {
-                        Log.d("Debug", "Data missing: Transactions or Accounts or Categories")
-                    }
+                    binding.transactionRecyclerView.adapter = TransactionListAdapter(
+                        transactions,
+                        accounts,
+                        categories,
+                        ::showEditAccountDialog,
+                        ::deleteAccount,
+                        ::showMapFragment,
+                        ::onTransactionClicked
+                    )
                 }
             }
         }
     }
 
-    fun updateTransactionsByMonth(selectedMonth: Int) {
+    suspend fun updateTransactionsByMonth(selectedMonth: Int) {
         viewModel.loadTransactionsByMonth(selectedMonth)
         setupTransactionList()
     }
@@ -144,13 +140,25 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
 
     fun onTransactionClicked(id: Int) {
         val tr = viewModel.getTransactioByID(id)
-        val transactionDetail = FragmentDetailTransaction.newInstance(tr)
+        val compte = tr?.let { getAccountNameById(it.compteId) }
+        val categorie = tr?.let { getCategoryNameById(it.categoryId) }
+        val transactionDetail = FragmentDetailTransaction.newInstance(tr, compte, categorie)
         transacToUpdate = id
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayoutContainer, transactionDetail)
             .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
             .commit()
+    }
+
+    private fun getAccountNameById(id: Int): String {
+        val accounts = accountListViewModel.accounts.value
+        return accounts.find { it.id == id }?.nom ?: "Unknown Account"
+    }
+
+    private fun getCategoryNameById(id: Int): String {
+        val categories = categoryListViewModel.categories.value
+        return categories.find { it.id == id }?.nom ?: "Unknown Category"
     }
 
     override fun onLatLngSelected(latLng: LatLng) {

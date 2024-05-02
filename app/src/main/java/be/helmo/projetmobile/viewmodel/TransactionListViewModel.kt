@@ -36,11 +36,9 @@ class TransactionListViewModel(
 
     var transac: Transaction? = null
 
-    init {
-        loadTransactions()
-    }
+    var month: Int = 12
 
-    private fun loadTransactions() {
+    init {
         viewModelScope.launch {
             transactionRepository.getTransactions().collect { listOfTransac ->
                 _transaction.value = listOfTransac
@@ -48,13 +46,33 @@ class TransactionListViewModel(
         }
     }
 
-    fun loadTransactionsByMonth(month: Int) {
-        val filteredTransactions = _transaction.value.filter { transaction ->
-            val cal = Calendar.getInstance()
-            cal.time = transaction.date
-            cal.get(Calendar.MONTH) == month
+    private fun loadTransactions() {
+        viewModelScope.launch {
+            transactionRepository.getTransactions().collect { listOfTransac ->
+                _transaction.value = listOfTransac
+            }
+            if (month != 13) {
+                val filteredTransactions = _transaction.value.filter { transaction ->
+                    val cal = Calendar.getInstance()
+                    cal.time = transaction.date
+                    cal.get(Calendar.MONTH) == month
+                }
+                _transaction.value = filteredTransactions
+            }
         }
-        _transaction.value = filteredTransactions
+    }
+
+    suspend fun loadTransactionsByMonth(month: Int) {
+        this.month = month
+        viewModelScope.launch {
+            loadTransactions()
+            val filteredTransactions = _transaction.value.filter { transaction ->
+                val cal = Calendar.getInstance()
+                cal.time = transaction.date
+                cal.get(Calendar.MONTH) == month
+            }
+            _transaction.value = filteredTransactions
+        }.join()
     }
 
     fun updateLieu(transactionId: Int, pos: LatLng) {
