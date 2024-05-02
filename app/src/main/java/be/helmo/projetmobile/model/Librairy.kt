@@ -18,7 +18,7 @@ data class User(
 @Entity
 data class Compte(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val nom: String,
+    var nom: String,
     val devise: String,
     var solde: Double
 )
@@ -56,35 +56,6 @@ data class Transfere(
     val montant: Double,
     val date: Date
 )
-
-@Entity(
-    foreignKeys = [
-        ForeignKey(
-            entity = Compte::class,
-            parentColumns = ["id"],
-            childColumns = ["compte"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = Category::class,
-            parentColumns = ["id"],
-            childColumns = ["category"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
-)
-
-data class Recurance(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val nom: String,
-    val montant: Double,
-    val compte: Int,
-    val date: Date,
-    val category: Int
-) {
-}
 
 @Entity(
     foreignKeys = [

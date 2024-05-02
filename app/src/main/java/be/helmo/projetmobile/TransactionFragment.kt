@@ -41,7 +41,6 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
 
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

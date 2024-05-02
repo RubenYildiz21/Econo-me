@@ -19,7 +19,7 @@ class UserFragment : HeaderFragment(R.layout.fragment_profile) {
     private lateinit var headerUsernameTextView: TextView
 
     private val viewModel: UserViewModel by viewModels {
-        UserViewModelFactory(UserRepository.get()) // Assurez-vous que cette partie correspond à votre configuration de Factory
+        UserViewModelFactory(UserRepository.get())
     }
 
     override fun onCreateView(
@@ -35,7 +35,7 @@ class UserFragment : HeaderFragment(R.layout.fragment_profile) {
 
         headerUsernameTextView = view.findViewById(R.id.nameOnProfile) ?: return
         viewModel.userLiveData.observe(viewLifecycleOwner) { user ->
-            // Mettez à jour l'interface utilisateur ici
+
             headerUsernameTextView.text = user?.let { "${it.nom} ${it.prenom}" } ?: "Aucun utilisateur"
         }
 
@@ -44,8 +44,9 @@ class UserFragment : HeaderFragment(R.layout.fragment_profile) {
             val prenom = binding.userLastname.text.toString()
             if (validateInputs(nom, prenom)) { // Validez vos entrées ici
                 viewModel.updateUser(nom, prenom)
+                Toast.makeText(context, "Profil mis a jour avec succes", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Invalid input", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Champs incorrects", Toast.LENGTH_SHORT).show()
             }
         }
     }

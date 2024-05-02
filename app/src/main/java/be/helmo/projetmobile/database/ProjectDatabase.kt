@@ -7,12 +7,11 @@ import android.content.Context
 import androidx.room.TypeConverters
 import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Compte
-import be.helmo.projetmobile.model.Recurance
 import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.model.Transfere
 import be.helmo.projetmobile.model.User
 
-@Database(entities = [Category::class, User::class, Compte::class, Transaction::class, Transfere::class, Recurance::class], version = 1, exportSchema = false)
+@Database(entities = [Category::class, User::class, Compte::class, Transaction::class, Transfere::class], version = 1, exportSchema = false)
 @TypeConverters(ItemsConverter::class, LatLngConverter::class)
 abstract class ProjectDatabase : RoomDatabase() {
 
@@ -21,7 +20,6 @@ abstract class ProjectDatabase : RoomDatabase() {
     abstract fun compteDao(): CompteDao
     abstract fun userDao(): UserDao
     abstract fun transferDao(): TransfereDao
-    abstract fun recuranceDao(): RecuranceDao
     companion object {
         private var INSTANCE: ProjectDatabase? = null
 
@@ -33,7 +31,7 @@ abstract class ProjectDatabase : RoomDatabase() {
         }
 
         fun get(): ProjectDatabase {
-            return INSTANCE ?: throw IllegalStateException("CategoryDatabase must be initialized")
+            return INSTANCE ?: throw IllegalStateException("Database must be initialized")
         }
     }
 }

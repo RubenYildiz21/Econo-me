@@ -2,16 +2,11 @@ package be.helmo.projetmobile
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
 import be.helmo.projetmobile.database.UserRepository
 import be.helmo.projetmobile.databinding.ActivityMainBinding
-import be.helmo.projetmobile.view.AccountFragment
-import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.UserViewModel
 import be.helmo.projetmobile.viewmodel.UserViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView

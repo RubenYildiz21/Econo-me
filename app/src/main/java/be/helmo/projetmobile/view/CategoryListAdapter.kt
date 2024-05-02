@@ -31,9 +31,6 @@ class CategoryListAdapter(
         holder.bind(categories[position], onEditClicked, onDeleteClicked)
     }
 
-    fun deleteItem(position: Int) {
-
-    }
 }
 
 class CategoryHolder(val binding: ListItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {

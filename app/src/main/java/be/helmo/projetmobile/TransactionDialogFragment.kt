@@ -113,6 +113,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
+    private fun showMapFragment() {
+        val mapFragment = MapFragment()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, mapFragment)
+            .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
+            .commit()
+    }
+
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -175,16 +183,16 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
     }
 
     private fun updateTransactionType() {
-        // Chargez les types de transactions à partir des ressources.
+
         val transactionTypes = resources.getStringArray(R.array.transaction_type)
 
-        // Créer un ArrayAdapter utilisant un layout simple pour le dropdown.
+
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypes)
 
-        // Assurez-vous que votre layout a un AutoCompleteTextView ou Spinner avec l'ID approprié.
+
         binding.typeSpinner.setAdapter(adapter)
 
-        // Si vous gérez les types de transactions pour les éditer, vous pouvez définir le type actuel ici.
+
         transaction?.let {
             val typeIndex = transactionTypes.indexOf(if (it.type) "Revenu" else "Dépense")
             binding.typeSpinner.setText(transactionTypes[typeIndex], false)
@@ -207,14 +215,6 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
             viewModel.onTransactionComplete = null
             nameEditText.setText(it.nom)
             binding.transactionPrice.setText(it.solde.toString())
-
-            /**if (transaction != null) {
-                val nameCat = category.firstOrNull { it.id == transaction!!.categoryId }?.nom
-                binding.categorySpinner.setText(nameCat, false)
-
-                val nameCompte = accounts.firstOrNull { it.id == transaction!!.compteId }?.nom
-                binding.accountSpinner.setText(nameCompte, false)
-            }*/
 
             // Extraction de l'année, du mois et du jour de la date de la transaction
             val calendar = Calendar.getInstance()

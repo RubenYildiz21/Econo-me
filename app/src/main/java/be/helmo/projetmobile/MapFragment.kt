@@ -42,17 +42,13 @@ class MapFragment() : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        //val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+
         mapFragment.getMapAsync(this)
 
         binding.myButton.setOnClickListener {
             savePosition()
             requireActivity().supportFragmentManager.popBackStack()
         }
-        /**val button = childFragmentManager.findFragmentById(R.id.myButton) as Button
-        button.setOnClickListener {
-            savePosition()
-        }*/
     }
 
     private fun savePosition() {
@@ -62,11 +58,6 @@ class MapFragment() : Fragment(),
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setPadding(0, 0, 0, 200)
         mGoogleMap = googleMap
-        /**googleMap.addMarker(
-        MarkerOptions()
-        .position(LatLng(0.0, 0.0))
-        .title("Marker")
-        )*/
 
         googleMap.setOnMapClickListener(this)
         pos = enableMyLocation()

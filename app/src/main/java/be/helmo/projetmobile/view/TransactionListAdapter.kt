@@ -1,10 +1,13 @@
 package be.helmo.projetmobile.view
 
 import android.graphics.Color
+import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.helmo.placereport.view.getScaledBitmap
@@ -57,9 +60,11 @@ class TransactionListAdapter(
             binding.compteName.text = transaction.compteId.toString()
             binding.transactionPrice.text = String.format("%.2f", transaction.solde)
             if (transaction.type) {
-                binding.transactionPrice.setTextColor(Color.GREEN)
+                val color = ContextCompat.getColor(itemView.context, R.color.green)
+                binding.transactionPrice.setTextColor(color)
             } else {
-                binding.transactionPrice.setTextColor(Color.RED)
+                val color = ContextCompat.getColor(itemView.context, R.color.red)
+                binding.transactionPrice.setTextColor(color)
             }
             binding.categoryName.text = getCategoryNameById(transaction.categoryId)
             binding.compteName.text = getAccountNameById(transaction.compteId)

@@ -134,7 +134,7 @@ class TransactionListViewModel(
     fun deleteTransaction(transaction: Transaction) {
         viewModelScope.launch {
             transactionRepository.deleteTransaction(transaction)
-            loadTransactions()  // Refresh the list after deletion
+            loadTransactions()
         }
     }
 
@@ -142,13 +142,9 @@ class TransactionListViewModel(
         var totalRevenu = 0.0
 
         viewModelScope.launch {
-            // Collecting the StateFlow<List<Transaction>>
             transaction.collect { transactions ->
-                // Looping through each transaction in the list
                 for (transaction in transactions) {
-                    // Checking if transaction.type is true
                     if (transaction.type) {
-                        // Adding the solde to the total revenu
                         totalRevenu += transaction.solde
                     }
                 }
@@ -161,13 +157,9 @@ class TransactionListViewModel(
         var totalDepense = 0.0
 
         viewModelScope.launch {
-            // Collecting the StateFlow<List<Transaction>>
             transaction.collect { transactions ->
-                // Looping through each transaction in the list
                 for (transaction in transactions) {
-                    // Checking if transaction.type is true
                     if (!transaction.type) {
-                        // Adding the solde to the total revenu
                         totalDepense += transaction.solde
                     }
                 }

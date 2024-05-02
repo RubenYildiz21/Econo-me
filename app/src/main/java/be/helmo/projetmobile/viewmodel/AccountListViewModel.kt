@@ -26,7 +26,11 @@ class AccountListViewModel : ViewModel() {
         loadComptes()
     }
 
-    private fun loadComptes() {
+    fun initAccountsForTest(accounts: List<Compte>) {
+        _accounts.value = accounts
+    }
+
+    fun loadComptes() {
         viewModelScope.launch {
             accountRepository.getComptes().collect { listOfComptes ->
                 _accounts.value = listOfComptes
@@ -49,7 +53,7 @@ class AccountListViewModel : ViewModel() {
     fun deleteAccount(account: Compte) {
         viewModelScope.launch {
             accountRepository.deleteCompte(account)
-            loadComptes()  // Refresh the list after deletion
+            loadComptes()
         }
     }
 

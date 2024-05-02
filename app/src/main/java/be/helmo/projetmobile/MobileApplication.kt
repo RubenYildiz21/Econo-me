@@ -8,6 +8,5 @@ class MobileApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ProjectDatabase.create(this)
-        //ProjectDatabase.create(ProjectDatabase.get())
     }
 }

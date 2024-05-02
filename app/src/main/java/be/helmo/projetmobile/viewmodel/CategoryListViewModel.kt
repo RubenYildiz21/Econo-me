@@ -27,6 +27,10 @@ class CategoryListViewModel : ViewModel() {
         }
     }
 
+    fun initAccountsForTest(categories: List<Category>) {
+        _categories.value = categories
+    }
+
     suspend fun addCategory(name: String) : Int {
         val category = Category(0, name, 0.0)
         categoryRepository.addCategory(category)
@@ -36,10 +40,9 @@ class CategoryListViewModel : ViewModel() {
     fun saveOrUpdateCategory(category: Category) {
         viewModelScope.launch {
             if (category.id > 0) {
-                // L'ID existe, donc c'est une mise à jour
                 categoryRepository.updateCategory(category)
             } else {
-                // Pas d'ID, donc c'est une nouvelle entrée
+
                 categoryRepository.addCategory(category)
             }
         }
@@ -48,11 +51,11 @@ class CategoryListViewModel : ViewModel() {
     fun deleteCat(cat: Category) {
         viewModelScope.launch {
             categoryRepository.deleteCat(cat)
-            loadCats()  // Refresh the list after deletion
+            loadCats()
         }
     }
 
-    private fun loadCats() {
+    fun loadCats() {
         viewModelScope.launch {
             categoryRepository.getCategories().collect { listOfComptes ->
                 _categories.value = listOfComptes
