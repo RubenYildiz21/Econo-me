@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_map_api_key">AIzaSyAx0luzZzrD9_WcbI61etLbMEKfBlpn18A</string>
     <string name="app_name">ProjetMobile</string>
     <string name="home_button">Go To HomePage</string>
     <string name="welcome">Bienvenu !</string>
@@ -64,11 +65,13 @@
     <string name="categoriesPerMonth">Catégories ce mois-ci</string>
     <string name="date">Sélectionner la date</string>
     <string name="select_type">Sélectionner le type de transaction</string>
+    <string name="chercher_location">Entrez une adresse</string>
     <string name="amountRevenu">50$</string>
     <string name="amountDepense">100$</string>
     <string name="myProfile">Mon profil</string>
     <string name="user_update">Modifer</string>
     <string name="gotoprofile">GoToProfile</string>
+    <string name="retour">Retour</string>
 
     <string-array name="currency_array">
         <item>EUR - Euro</item>

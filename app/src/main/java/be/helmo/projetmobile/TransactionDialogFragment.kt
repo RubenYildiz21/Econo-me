@@ -1,7 +1,9 @@
 package be.helmo.projetmobile
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +33,7 @@ import java.io.File
 import java.util.Calendar
 import java.util.Date
 import be.helmo.projetmobile.model.Compte
+import com.google.android.gms.maps.model.LatLng
 
 class TransactionDialogFragment: BottomSheetDialogFragment() {
     private lateinit var confirmButton: Button
@@ -108,6 +111,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
+    private fun showMapFragment() {
+        val mapFragment = MapFragment()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, mapFragment)
+            .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
+            .commit()
+    }
+
     fun loadAccounts() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -116,13 +127,13 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
-                        transaction?.let { transaction ->
+                        /**transaction?.let { transaction ->
                             val accountId = transaction.compteId
                             val position = account.indexOfFirst { it.id == accountId }
                             if (position != -1) {
                                 binding.accountSpinner.setSelection(position)
                             }
-                        }
+                        }*/
                     }
                 }
             }
@@ -140,15 +151,13 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                 categoryListViewModel.categories.collect { categories ->
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
-                    /*
-                    transaction?.let { transaction ->
+                    /**transaction?.let { transaction ->
                         val categoryId = transaction.categoryId
                         val position = categories.indexOfFirst { it.id == categoryId }
                         if (position != -1) {
                             binding.categorySpinner.setSelection(position)
                         }
-                    }
-                     */
+                    }*/
                 }
             }
         }
@@ -262,7 +271,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
         val selectedAccount = accounts.find { it.nom == compte }
         val currency = selectedAccount?.devise.toString()
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, "", currency, photoFileName, type)
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, LatLng(0.0, 0.0), currency, photoFileName, type)
         updatePhoto(binding.facturePhoto, photoFileName)
         viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
 

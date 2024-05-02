@@ -2,11 +2,14 @@ package be.helmo.projetmobile.view
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.helmo.placereport.view.getScaledBitmap
+import be.helmo.projetmobile.FragmentDetailTransaction
+import be.helmo.projetmobile.R
 import be.helmo.projetmobile.databinding.ListItemAccountBinding
 import be.helmo.projetmobile.databinding.ListItemTransactionBinding
 import be.helmo.projetmobile.model.Category
@@ -19,7 +22,9 @@ class TransactionListAdapter(
     private val accounts: List<Compte>,
     private val categories: List<Category>,
     private val onEditClicked: (transactionId: Int) -> Unit,
-    private val onDeleteClicked: (transactionId: Int) -> Unit
+    private val onDeleteClicked: (transactionId: Int) -> Unit,
+    private val showMapFragment: (transitionId: Int) -> Unit,
+    private val onTransactionClicked: (transitionId: Int) -> Unit
 ) : RecyclerView.Adapter<TransactionListAdapter.TransactionHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
@@ -33,7 +38,7 @@ class TransactionListAdapter(
     }
 
     override fun onBindViewHolder(holder: TransactionHolder, position: Int) {
-        holder.bind(transaction[position], onEditClicked, onDeleteClicked)
+        holder.bind(transaction[position], onEditClicked, onDeleteClicked, showMapFragment, onTransactionClicked)
     }
 
     private fun getAccountNameById(id: Int): String {
@@ -45,13 +50,13 @@ class TransactionListAdapter(
     }
 
     inner class TransactionHolder(val binding: ListItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(transaction: Transaction, onEditClicked: (transactionId: Int) -> Unit, onDeleteClicked: (transactionId: Int) -> Unit) {
+        fun bind(transaction: Transaction, onEditClicked: (transactionId: Int) -> Unit, onDeleteClicked: (transactionId: Int) -> Unit, showMapFragment: (transactionId: Int) -> Unit, onTransactionClicked: (transactionId: Int) -> Unit) {
             binding.transactionName.text = transaction.nom
             binding.transactionPrice.text = "${transaction.solde}"
             binding.categoryName.text = transaction.categoryId.toString()
-            if (transaction.facture != "") {
+            /*if (transaction.facture != "") {
                 updatePhoto(binding.showFacture, transaction.facture)
-            }
+            }*/
             binding.compteName.text = transaction.compteId.toString()
             binding.transactionPrice.text = String.format("%.2f", transaction.solde)
             if (transaction.type) {
@@ -67,6 +72,12 @@ class TransactionListAdapter(
             }
             binding.deleteAccount.setOnClickListener{
                 onDeleteClicked(transaction.id)
+            }
+            binding.showFacture.setOnClickListener {
+                showMapFragment(transaction.id)
+            }
+            binding.transaction.setOnClickListener {
+                onTransactionClicked(transaction.id)
             }
         }
 
