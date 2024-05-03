@@ -21,6 +21,7 @@ import be.helmo.projetmobile.R
 import be.helmo.projetmobile.TransactionDialogFragment
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
+import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
@@ -50,6 +51,16 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
     private lateinit var binding: FragmentTransactionListBinding
     private val accountListViewModel: AccountListViewModel by viewModels()
     private val categoryListViewModel: CategoryListViewModel by viewModels()
+    private var isContainedInHome: Boolean = false
+
+    companion object {
+        fun newInstance(isContainedInHome: Boolean): TransactionListFragment {
+            val fragment = TransactionListFragment()
+            fragment.isContainedInHome = isContainedInHome
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,8 +86,14 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
                 ) { transactions, accounts, categories ->
                     Triple(transactions, accounts, categories)
                 }.collect { (transactions, accounts, categories) ->
+                    val filteredTransactions = isPreviousFragmentHome(transactions)
+                    /**val filteredTransactions = if (isContainedInHome) {
+                        transactions.takeLast(3)
+                    } else {
+                        transactions
+                    }*/
                     binding.transactionRecyclerView.adapter = TransactionListAdapter(
-                        transactions,
+                        filteredTransactions,
                         accounts,
                         categories,
                         ::showEditAccountDialog,
@@ -89,29 +106,17 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
         }
     }
 
-    /**private fun setupTransactionList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                combine(
-                    viewModel.transaction,
-                    accountListViewModel.account,
-                    categoryListViewModel.categories
-                ) { transactions, accounts, categories ->
-                    Triple(transactions, accounts, categories)
-                }.collect { (transactions, accounts, categories) ->
-                    binding.transactionRecyclerView.adapter = TransactionListAdapter(
-                        transactions,
-                        accounts,
-                        categories,
-                        ::showEditAccountDialog,
-                        ::deleteAccount,
-                        ::showMapFragment,
-                        ::onTransactionClicked
-                    )
-                }
-            }
+    private fun isPreviousFragmentHome(list: List<Transaction>): List<Transaction> {
+        if (isContainedInHome) {
+            // Trier la liste des transactions par date dans l'ordre décroissant
+            val sortedList = list.sortedByDescending { it.date }
+
+            // Prendre les trois premières transactions
+            val latestTransactions = sortedList.take(3)
+            return latestTransactions
         }
-    }*/
+        return  list.sortedByDescending { it.date }
+    }
 
     fun updateTransactionsByMonth(selectedMonth: Int) {
         viewModel.loadTransactionsByMonth(selectedMonth)

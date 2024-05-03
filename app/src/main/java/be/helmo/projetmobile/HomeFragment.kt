@@ -14,6 +14,7 @@ import be.helmo.projetmobile.database.CategoryRepository
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentHomeBinding
 import be.helmo.projetmobile.model.Category
+import be.helmo.projetmobile.view.TransactionListFragment
 import be.helmo.projetmobile.viewmodel.CurrencyViewModel
 import be.helmo.projetmobile.viewmodel.HomeViewModel
 import be.helmo.projetmobile.viewmodel.HomeViewModelFactory
@@ -35,6 +36,10 @@ class HomeFragment : HeaderFragment(R.layout.fragment_home) {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val transactionListFragment = TransactionListFragment.newInstance(true)
+        childFragmentManager.beginTransaction()
+            .replace(R.id.container, transactionListFragment)
+            .commit()
         setupObserver()
         Log.d("HomeFragment", "Transaction loaded")
         return binding!!.root
