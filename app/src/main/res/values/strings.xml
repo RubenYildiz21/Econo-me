@@ -1,6 +1,6 @@
 <resources>
     <string name="google_map_api_key">AIzaSyAx0luzZzrD9_WcbI61etLbMEKfBlpn18A</string>
-    <string name="app_name">ProjetMobile</string>
+    <string name="app_name">EconoMe</string>
     <string name="home_button">Go To HomePage</string>
     <string name="welcome">Bienvenu !</string>
     <string name="nom_user">Ruben Yildiz</string>
