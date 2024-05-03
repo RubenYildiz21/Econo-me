@@ -38,6 +38,10 @@ class TransactionListViewModel(
 
     var transac: Transaction? = null
 
+    var month: Int = 12
+    var totalD: Double = 0.0
+    var totalR: Double = 0.0
+
     private val _revenuSum = MutableLiveData<Double>()
     val revenuSum: LiveData<Double> = _revenuSum
 
@@ -54,17 +58,30 @@ class TransactionListViewModel(
         viewModelScope.launch {
             transactionRepository.getTransactions().collect { listOfTransac ->
                 _transaction.value = listOfTransac
+                if (month != 12) {
+                    val filteredTransactions = _transaction.value.filter { transaction ->
+                        val cal = Calendar.getInstance()
+                        cal.time = transaction.date
+                        cal.get(Calendar.MONTH) == month
+                    }
+                    _transaction.value = filteredTransactions
+                }
             }
         }
     }
 
     fun loadTransactionsByMonth(month: Int) {
-        val filteredTransactions = _transaction.value.filter { transaction ->
-            val cal = Calendar.getInstance()
-            cal.time = transaction.date
-            cal.get(Calendar.MONTH) == month
-        }
-        _transaction.value = filteredTransactions
+        this.month = month
+        loadTransactions()
+        /**viewModelScope.launch {
+            loadTransactions()
+            val filteredTransactions = _transaction.value.filter { transaction ->
+                val cal = Calendar.getInstance()
+                cal.time = transaction.date
+                cal.get(Calendar.MONTH) == month
+            }
+            _transaction.value = filteredTransactions
+        }.join()*/
     }
 
     fun updateLieu(transactionId: Int, pos: LatLng) {
@@ -119,7 +136,7 @@ class TransactionListViewModel(
                 }
             }
 
-            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, LatLng(0.0, 0.0), transaction.devise, transaction.facture, transaction.type)
+            newTransaction = Transaction(transaction.id ?: 0, transaction.nom, cat!!.id, acc!!.id, transaction.date, montant, transaction.lieu, transaction.devise, transaction.facture, transaction.type)
         }.join()
         return newTransaction
     }
@@ -157,32 +174,9 @@ class TransactionListViewModel(
                     }
                 }
             }
-        }.join()
+            totalD = totalDepense
+        }
         return totalDepense
-    }
-
-    fun getPos(id: Int): LatLng {
-        var pos: LatLng = LatLng(0.0, 0.0)
-        viewModelScope.launch {
-            val list =transaction.first()
-            val t = list.firstOrNull {it.id == id}
-            if (t != null) {
-                pos = t.lieu
-            }
-        }
-        return pos
-    }
-
-    fun getImage(id: Int): String {
-        var nom: String = ""
-        viewModelScope.launch {
-            val list = transaction.first()
-            val t = list.firstOrNull {it.id == id}
-            if (t != null) {
-                nom = t.facture
-            }
-        }
-        return nom
     }
 
     fun getTransactioByID(id: Int): Transaction? {

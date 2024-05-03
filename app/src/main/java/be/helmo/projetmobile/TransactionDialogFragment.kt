@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionAddBinding
+import be.helmo.projetmobile.model.Category
 import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
@@ -51,6 +52,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
 
     private val categoryListViewModel: CategoryListViewModel by viewModels()
     private val accountListViewModel: AccountListViewModel by viewModels()
+    private var category: List<Category> = listOf()
 
     private lateinit var binding: FragmentTransactionAddBinding
     private var mode: Mode = Mode.CREATE
@@ -92,7 +94,7 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         if (transaction?.facture != null) {
             photoFileName = transaction?.facture.toString()
         } else {
-            val tokenLength = 10
+            val tokenLength = 10 // Longueur du token
             photoFileName = generateRandomToken(tokenLength)
         }
         val facturePhoto = binding.facturePhoto
@@ -127,6 +129,11 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
                     if (account.isNotEmpty()) {
                         val name = account.map { "${it.nom} (${it.devise})"}
                         updateAccountDropdown(name)
+                        transaction?.let { transaction ->
+                            val accountId = transaction.compteId
+                            val nameAccount = account.firstOrNull() { it.id == accountId }?.nom
+                            binding.accountSpinner.setText(nameAccount, false)
+                        }
                     }
                 }
             }
@@ -142,8 +149,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 categoryListViewModel.categories.collect { categories ->
+                    category = categories
                     val name = categories.map { "${it.nom}"}
                     updateCategoriesDropdown(name)
+                    transaction?.let { transaction ->
+                        val categoryId = transaction.categoryId
+                        val nameCat = categories.firstOrNull { it.id == categoryId }?.nom
+                        binding.categorySpinner.setText(nameCat, false)
+                    }
                 }
             }
         }
@@ -254,10 +267,14 @@ class TransactionDialogFragment: BottomSheetDialogFragment() {
         } else {
             type = true
         }
+        var pos: LatLng = LatLng(0.0, 0.0)
+        if (transaction?.lieu != null) {
+            pos = transaction!!.lieu
+        }
 
         val selectedAccount = accounts.find { it.nom == compte }
         val currency = selectedAccount?.devise.toString()
-        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, LatLng(0.0, 0.0), currency, photoFileName, type)
+        val updatedTransaction = Transaction(transaction?.id ?: 0, name, 0, 0, date, montant, pos, currency, photoFileName, type)
         updatePhoto(binding.facturePhoto, photoFileName)
         viewModel.saveOrUpdateTransaction(compte, category, montant, updatedTransaction)
 

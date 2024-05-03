@@ -21,6 +21,7 @@ import be.helmo.projetmobile.R
 import be.helmo.projetmobile.TransactionDialogFragment
 import be.helmo.projetmobile.database.TransactionRepository
 import be.helmo.projetmobile.databinding.FragmentTransactionListBinding
+import be.helmo.projetmobile.model.Transaction
 import be.helmo.projetmobile.viewmodel.AccountListViewModel
 import be.helmo.projetmobile.viewmodel.CategoryListViewModel
 import be.helmo.projetmobile.viewmodel.TransactionListViewModel
@@ -50,6 +51,16 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
     private lateinit var binding: FragmentTransactionListBinding
     private val accountListViewModel: AccountListViewModel by viewModels()
     private val categoryListViewModel: CategoryListViewModel by viewModels()
+    private var isContainedInHome: Boolean = false
+
+    companion object {
+        fun newInstance(isContainedInHome: Boolean): TransactionListFragment {
+            val fragment = TransactionListFragment()
+            fragment.isContainedInHome = isContainedInHome
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,22 +86,36 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
                 ) { transactions, accounts, categories ->
                     Triple(transactions, accounts, categories)
                 }.collect { (transactions, accounts, categories) ->
-                    if (transactions.isNotEmpty() && accounts.isNotEmpty() && categories.isNotEmpty()) {
-                        binding.transactionRecyclerView.adapter = TransactionListAdapter(
-                            transactions,
-                            accounts,
-                            categories,
-                            ::showEditAccountDialog,
-                            ::deleteAccount,
-                            ::showMapFragment,
-                            ::onTransactionClicked
-                        )
+                    val filteredTransactions = isPreviousFragmentHome(transactions)
+                    /**val filteredTransactions = if (isContainedInHome) {
+                        transactions.takeLast(3)
                     } else {
-                        Log.d("Debug", "Data missing: Transactions or Accounts or Categories")
-                    }
+                        transactions
+                    }*/
+                    binding.transactionRecyclerView.adapter = TransactionListAdapter(
+                        filteredTransactions,
+                        accounts,
+                        categories,
+                        ::showEditAccountDialog,
+                        ::deleteAccount,
+                        ::showMapFragment,
+                        ::onTransactionClicked
+                    )
                 }
             }
         }
+    }
+
+    private fun isPreviousFragmentHome(list: List<Transaction>): List<Transaction> {
+        if (isContainedInHome) {
+            // Trier la liste des transactions par date dans l'ordre décroissant
+            val sortedList = list.sortedByDescending { it.date }
+
+            // Prendre les trois premières transactions
+            val latestTransactions = sortedList.take(3)
+            return latestTransactions
+        }
+        return  list.sortedByDescending { it.date }
     }
 
     fun updateTransactionsByMonth(selectedMonth: Int) {
@@ -144,13 +169,25 @@ class TransactionListFragment: Fragment(), MapFragment.OnLatLngSelectedListener 
 
     fun onTransactionClicked(id: Int) {
         val tr = viewModel.getTransactioByID(id)
-        val transactionDetail = FragmentDetailTransaction.newInstance(tr)
+        val compte = tr?.let { getAccountNameById(it.compteId) }
+        val categorie = tr?.let { getCategoryNameById(it.categoryId) }
+        val transactionDetail = FragmentDetailTransaction.newInstance(tr, compte, categorie)
         transacToUpdate = id
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayoutContainer, transactionDetail)
             .addToBackStack(null) // Ajouter à la pile de retour si nécessaire
             .commit()
+    }
+
+    private fun getAccountNameById(id: Int): String {
+        val accounts = accountListViewModel.accounts.value
+        return accounts.find { it.id == id }?.nom ?: "Unknown Account"
+    }
+
+    private fun getCategoryNameById(id: Int): String {
+        val categories = categoryListViewModel.categories.value
+        return categories.find { it.id == id }?.nom ?: "Unknown Category"
     }
 
     override fun onLatLngSelected(latLng: LatLng) {

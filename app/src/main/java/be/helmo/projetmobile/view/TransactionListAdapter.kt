@@ -57,9 +57,6 @@ class TransactionListAdapter(
             binding.transactionName.text = transaction.nom
             binding.transactionPrice.text = "${transaction.solde}"
             binding.categoryName.text = transaction.categoryId.toString()
-            /*if (transaction.facture != "") {
-                updatePhoto(binding.showFacture, transaction.facture)
-            }*/
             binding.compteName.text = transaction.compteId.toString()
             binding.transactionPrice.text = String.format("%.2f", transaction.solde)
             if (transaction.type) {
