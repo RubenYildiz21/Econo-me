@@ -1,136 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-    <LinearLayout
+    android:orientation="vertical">
+
+    <!-- Header layout is placed outside of the ScrollView -->
+    <include layout="@layout/fragment_header"/>
+
+    <!-- ScrollView starts below the header -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include layout="@layout/fragment_header"/>
-
-        <LinearLayout
-            android:id="@+id/revenuDepense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_margin="16dp">
-
-            <RelativeLayout
-                android:id="@+id/rectangleRevenus"
-                android:layout_width="160dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/rounded_rectangle_green"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/descriptionRevenues"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/revenu"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/alata"/>
-
-                <TextView
-                    android:id="@+id/amountRevenus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:text=""
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/alata"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rectangleDepense"
-                android:layout_width="160dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/rounded_rectangle_red"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/descriptionDepense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/depense"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/alata"/>
-
-                <TextView
-                    android:id="@+id/amountDepenses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/alata"/>
-
-            </RelativeLayout>
-        </LinearLayout>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChartRevenus"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_weight="1"/>
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChartDepenses"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/transactions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:elevation="16dp"
-            android:layout_above="@id/bottomNav"
-            android:layout_marginTop="15dp">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/container"
+            <LinearLayout
+                android:id="@+id/revenuDepense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="be.helmo.projetmobile.view.TransactionListFragment"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_margin="10dp">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/rectangleRevenus"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="16dp"
+                    android:paddingHorizontal="10dp"
+                    android:background="@drawable/rounded_rectangle_green">
+
+                    <TextView
+                        android:id="@+id/descriptionRevenues"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/depense"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/alata"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/amountRevenus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata"
+                        android:text=""
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/rectangleDepense"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="16dp"
+                    android:paddingHorizontal="10dp"
+                    android:background="@drawable/rounded_rectangle_red">
+
+                    <TextView
+                        android:id="@+id/descriptionDepense"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/depense"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/alata"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/amountDepenses"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata"
+                        android:text=""
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartRevenus"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"/>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartDepenses"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transactions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:elevation="16dp"
+                android:layout_marginTop="15dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="be.helmo.projetmobile.view.TransactionListFragment"/>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
