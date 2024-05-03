@@ -36,7 +36,7 @@ class AccountListAdapter(
 
         fun bind(account: Compte, onEditClicked: (accountId: Int) -> Unit, onDeleteClicked: (accountId: Int) -> Unit) {
             binding.textViewAccountName.text = account.nom
-            binding.textViewAccountBalance.text = "${account.solde} ${account.devise}"
+            binding.textViewAccountBalance.text = String.format("%.2f %s", account.solde, account.devise)
             binding.editAccount.setOnClickListener {
                 onEditClicked(account.id)
             }

@@ -84,7 +84,7 @@ class AccountDialogFragment : BottomSheetDialogFragment() {
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencies.map { it.code })
             binding.accountCurrency.setAdapter(adapter)
         }
-        currencyViewModel.fetchCurrencies("7ffa7a005a49146fbf56b75c9499f1f8")
+        currencyViewModel.fetchCurrencies("8ff3d33aabc635aadd0974baa8774935")
     }
 
 
