@@ -19,6 +19,7 @@ class TransactionRepository (val database: ProjectDatabase, private val coroutin
 
     suspend fun getTransaction(transactionId: UUID): Transaction = database.transactionDao().getTransaction(transactionId)
 
+    fun getAccounts(): Flow<List<Compte>> = database.compteDao().getComptes()
 
     suspend fun addTransaction(transaction: Transaction) {
         val account = database.compteDao().getCompte(transaction.compteId)

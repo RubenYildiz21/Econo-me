@@ -3,6 +3,7 @@ package be.helmo.projetmobile.viewmodel
 import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
+import java.time.LocalDate
 import java.time.Month
 import java.util.Calendar
 import java.util.Date
@@ -40,8 +42,16 @@ class TransactionListViewModel(
     var totalD: Double = 0.0
     var totalR: Double = 0.0
 
+    private val _revenuSum = MutableLiveData<Double>()
+    val revenuSum: LiveData<Double> = _revenuSum
+
+    private val _expensesSum = MutableLiveData<Double>()
+    val expensesSum: LiveData<Double> = _expensesSum
+
+
     init {
         loadTransactions()
+        loadFinancialSummary()
     }
 
     private fun loadTransactions() {
@@ -138,7 +148,7 @@ class TransactionListViewModel(
         }
     }
 
-    fun getAllRevenu() {
+    suspend fun getAllRevenu(): Double {
         var totalRevenu = 0.0
 
         viewModelScope.launch {
@@ -149,11 +159,11 @@ class TransactionListViewModel(
                     }
                 }
             }
-            totalR = totalRevenu
-        }
+        }.join()
+        return totalRevenu
     }
 
-    fun getAllDepense() {
+    suspend fun getAllDepense(): Double {
         var totalDepense = 0.0
 
         viewModelScope.launch {
@@ -175,5 +185,47 @@ class TransactionListViewModel(
             trans = list.firstOrNull { it.id == id }
         }
         return trans
+    }
+
+    private fun loadFinancialSummary() {
+        viewModelScope.launch {
+            try {
+                // Calcul de la somme des revenus comme la somme des soldes des comptes
+                val allAccounts = transactionRepository.getAccounts().first()
+                val accountSum = allAccounts.sumOf { account ->
+                    convertCurrencyToEUR(account.solde, account.devise)
+                }
+
+                // Met à jour la somme des revenus dans LiveData
+                _revenuSum.postValue(accountSum)
+
+                // Récupération des transactions pour le mois en cours
+                val currentMonth = LocalDate.now().monthValue.toString().padStart(2, '0')
+                Log.d("TransactionListViewModel", "month : $currentMonth")
+                val transactionsThisMonth = transactionRepository.getTransactionsByMonth(currentMonth).first()
+                Log.d("TransactionListViewModel", "transactionsThisMonth : ${transactionsThisMonth.filter { it.type }}")
+
+                // Filtrage des transactions pour obtenir uniquement les dépenses
+                val expenseSum = transactionsThisMonth.filter { !it.type }.sumOf { transaction ->
+                    convertCurrencyToEUR(transaction.solde, transaction.devise)
+                }
+
+                // Met à jour la somme des dépenses dans LiveData
+                _expensesSum.postValue(expenseSum)
+
+            } catch (e: Exception) {
+                Log.e("TransactionListViewModel", "Error loading financial summary: ${e.message}")
+            }
+        }
+    }
+
+    private suspend fun convertCurrencyToEUR(amount: Double, currency: String): Double {
+        return if (currency != "EUR") {
+            val rate = CurrencyViewModel.getRate(currency)
+            Log.d("TransactionListViewModel", "rate : $rate")
+            amount * (1 / rate)
+        } else {
+            amount
+        }
     }
 }

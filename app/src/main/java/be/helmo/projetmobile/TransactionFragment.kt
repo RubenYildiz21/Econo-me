@@ -1,6 +1,7 @@
 package be.helmo.projetmobile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,6 +84,15 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
         binding.AddTransaction.setOnClickListener {
             val addDialog = TransactionDialogFragment.newInstance(null, Mode.CREATE, takePictureLauncher)
             addDialog.show(childFragmentManager, "AddTransaction")
+        }
+
+        viewModel.revenuSum.observe(viewLifecycleOwner){sum->
+            Log.d("TransactionFragment", "somme revenu : $sum")
+            binding.amountRevenu.text = String.format("%.2f€", sum)
+        }
+        viewModel.expensesSum.observe(viewLifecycleOwner){sum->
+            Log.d("TransactionFragment", "somme depenses : $sum")
+            binding.amountDepense.text = String.format("%.2f€", sum)
         }
     }
 
