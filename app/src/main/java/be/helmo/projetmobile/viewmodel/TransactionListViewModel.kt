@@ -176,6 +176,7 @@ class TransactionListViewModel(
             }
             totalD = totalDepense
         }
+        return totalDepense
     }
 
     fun getTransactioByID(id: Int): Transaction? {

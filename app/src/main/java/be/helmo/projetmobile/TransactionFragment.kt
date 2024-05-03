@@ -60,15 +60,15 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
             setupHeaderButton()
         }
 
-        setAmounts()
+        //setAmounts()
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        /**viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.amountRevenu.text = viewModel.getAllRevenu().toString()
                 val depense = viewModel.getAllDepense().toString()
                 binding.amountDepense.text = depense
             }
-        }
+        }*/
 
         binding.month.setOnItemClickListener { parent, view, position, id ->
             val months = resources.getStringArray(R.array.months_array)
@@ -94,15 +94,6 @@ class TransactionFragment: HeaderFragment(R.layout.fragment_transaction) {
             Log.d("TransactionFragment", "somme depenses : $sum")
             binding.amountDepense.text = String.format("%.2f€", sum)
         }
-    }
-
-    private fun setAmounts() {
-        viewModel.getAllRevenu()
-        binding.amountRevenu.text = viewModel.totalR.toString()
-        viewModel.getAllDepense()
-        binding.amountDepense.text = viewModel.totalD.toString()
-        binding.amountRevenu.text = "12"
-        binding.amountDepense.text = "12"
     }
 
     private fun setupMonthDropdown() {
