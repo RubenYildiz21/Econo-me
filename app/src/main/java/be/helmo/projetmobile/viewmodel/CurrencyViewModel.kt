@@ -45,7 +45,7 @@ class CurrencyViewModel : ViewModel() {
 
     suspend fun getExchangeRate(sourceCurrency: String, destinationCurrency: String): Double {
         return try {
-            val response = exchangeService.getLatestRates("8ff3d33aabc635aadd0974baa8774935")
+            val response = exchangeService.getLatestRates("c197cd9b12b802df7504461f96f0b9fb")
             val rates = response.body()?.rates ?: return 1.0
 
             // Gérer le cas où l'euro est impliqué
@@ -82,7 +82,7 @@ class CurrencyViewModel : ViewModel() {
         }
         suspend fun getRate(currency: String): Double {
             return try {
-                val response = exchangeService.getLatestRates("8ff3d33aabc635aadd0974baa8774935")
+                val response = exchangeService.getLatestRates("c197cd9b12b802df7504461f96f0b9fb")
                 response.body()?.rates?.get(currency) ?: 1.0
             } catch (e: Exception) {
                 Log.e("CurrencyViewModel", "Error fetching rate for $currency: ${e.message}")
